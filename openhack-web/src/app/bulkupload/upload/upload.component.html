@@ -1,0 +1,74 @@
+<mat-toolbar role="heading" color="primary" class="mat-elevation-z6 tbar">
+  <mat-toolbar-row>
+    <h1>File Upload For Validation</h1>
+    <div style="flex-grow: 1"></div>
+    <i class="material-icons">
+      cloud_upload
+    </i>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-dialog-content>
+  <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 10px;">
+    <button mat-raised-button color="primary" (click)="onClick($event)">
+      <mat-icon>add</mat-icon>
+      Add Files
+    </button>
+    <input
+      #fileUpload
+      type="file"
+      class="input_fileupload--hidden"
+      (input)="onInput($event)"
+      (change)="onFileSelected($event)"
+      [(ngModel)]="inputFileName"
+      [accept]="accept"
+      [multiple]="multiple"
+    />
+    <div style="flex-grow: 1"></div>
+    <button
+      [disabled]="files.length === 0"
+      mat-raised-button
+      color="primary"
+      (click)="removeSelectedFiles(files)"
+      class="buttonPosition"
+    >
+      <mat-icon>delete</mat-icon>
+      Delete All
+    </button>
+  </div>
+
+  <mat-list>
+    <mat-list-item *ngFor="let file of files; let i = index">
+      <span matLine style="display: flex;"
+        ><span>{{ i + 1 }}. </span><span>{{ file.name }}</span>
+        <div style="flex-grow: 1"></div>
+        <span
+          ><i
+            class="material-icons"
+            style="cursor: pointer;"
+            (click)="removeFile($event, file)"
+          >
+            delete
+          </i></span
+        ></span
+      >
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<div mat-dialog-actions align="end">
+  <button
+    color="warm"
+    class="mat-raised-button"
+    [disabled]="!files || files.length === 0"
+    (click)="uploadFiles(files)"
+  >
+    Upload Files
+  </button>
+  <button
+    style="margin-left:10px;"
+    mat-button
+    [mat-dialog-close]="files"
+    cdkFocusInitial
+  >
+    Close
+  </button>
+</div>

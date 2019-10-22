@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.active_route {
+  text-decoration: underline;
+}
+
+.tbar {
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.cardStyle {
+  min-height: 80%;
+  margin: 6px;
+}
+
+.input_fileupload--hidden {
+  display: none;
+}
+
+.buttonPosition {
+  top: 50%;
+  margin-left: 50%;
+}
+
+mat-sidenav {
+  min-width: 20%;
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-dialog-override {
+  mat-dialog-container {
+    > :first-child {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    mat-dialog-content,
+    div[mat-dialog-content] {
+      flex-grow: 1;
+    }
+  }
+}
+

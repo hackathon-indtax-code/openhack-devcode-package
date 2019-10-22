@@ -1,0 +1,48 @@
+<mat-toolbar role="heading" color="primary" class="mat-elevation-z6 tbar">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+    </button>
+    <h1>Open Hack Project</h1>
+    <div style="flex-grow: 1"></div>
+    <i class="material-icons">
+      business
+    </i>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-nav-list>
+      <a
+        mat-list-item
+        [routerLink]="'/bulkupload'"
+        routerLinkActive="active_route"
+        ><i class="material-icons">
+          cloud_upload
+        </i>
+        <span style="padding-left:10px;font-weight:500">Bulk Upload</span>
+      </a>
+    </mat-nav-list>
+    <mat-nav-list>
+      <a mat-list-item routerLinkActive="active_route">
+        <i class="material-icons">
+          insert_drive_file
+        </i>
+        <span style="padding-left:10px;font-weight:500">Form 1</span>
+      </a>
+    </mat-nav-list>
+    <mat-nav-list>
+      <a mat-list-item routerLinkActive="active_route">
+        <i class="material-icons">
+          insert_drive_file
+        </i>
+        <span style="padding-left:10px;font-weight:500">Form 2</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="height: 88vh;">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
