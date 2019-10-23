@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.coyote.ErrorState;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,7 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.openhack.dev.configuration.FileUploadKafkaConfiguration;
 import com.openhack.dev.constant.FileConstants;
+import com.openhack.dev.domain.ErrorData;
 import com.openhack.dev.domain.FileMetadata;
+import com.openhack.dev.enums.ErrorStatus;
+import com.openhack.dev.enums.ValidateStatus;
 import com.openhack.dev.repository.FileUploadRepository;
 
 @Service
@@ -48,7 +52,8 @@ public class FileUploadService {
 			e.printStackTrace();
 		}
 		fileMetadata.setJsonData(jsonFielData);
-		fileMetadata.setValidateStatus(FileConstants.IS_SUBMITTED);
+		ValidateStatus validateStatus = ValidateStatus.SUBMITTED;
+		fileMetadata.setValidateStatus(validateStatus);
 		fileMetadataList.add(fileMetadata);
 		saveFileMetadata(fileMetadata);
 		initiateKafkaMessage(fileMetadata.getId());
@@ -69,7 +74,16 @@ public class FileUploadService {
 				e.printStackTrace();
 			}
 			fileMetadata.setJsonData(jsonFielData);
-			fileMetadata.setValidateStatus(FileConstants.IS_SUBMITTED);
+			ValidateStatus validateStatus = ValidateStatus.SUBMITTED;
+			fileMetadata.setValidateStatus(validateStatus);
+			/* Test Error List */
+			List<ErrorData> list = new ArrayList<ErrorData>();
+			ErrorData errorData = new ErrorData();
+			ErrorStatus errorState = ErrorStatus.SCHEMA_ERROR;
+			errorData.setErrorType(errorState);
+			errorData.setErrorDescription("First Name length is not valid");
+			list.add(errorData);
+			fileMetadata.setErrorDataList(list);
 			fileMetadataList.add(fileMetadata);
 			saveFileMetadata(fileMetadata);
 			initiateKafkaMessage(fileMetadata.getId());

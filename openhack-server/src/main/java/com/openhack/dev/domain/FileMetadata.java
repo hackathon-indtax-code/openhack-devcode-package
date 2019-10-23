@@ -1,6 +1,7 @@
 package com.openhack.dev.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -8,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.openhack.dev.enums.ValidateStatus;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +35,9 @@ public class FileMetadata implements Persistable<String> {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	private Date updatedDate;
 
-	private String validateStatus;
+	private ValidateStatus validateStatus;
+
+	private List<ErrorData> errorDataList;
 
 	@Override
 	public String getId() {

@@ -14,7 +14,8 @@
     Choose Files
   </button>
 
-  <button [disabled]="dataSource.data.length === 0"
+  <button
+    [disabled]="dataSource.data.length === 0"
     mat-raised-button
     color="primary"
     (click)="getValidatedFilesData('REFRESH')"
@@ -24,7 +25,8 @@
     Refresh All
   </button>
 
-  <button [disabled]="dataSource.data.length === 0"
+  <button
+    [disabled]="dataSource.data.length === 0"
     mat-raised-button
     color="primary"
     (click)="deleteAllValidateFielData()"
@@ -38,7 +40,7 @@
 <div
   class="container mat-elevation-z8"
   fxLayout="column"
- style="margin-left: 10px;margin-right: 10px;"
+  style="margin-left: 10px;margin-right: 10px;"
 >
   <table mat-table matSort [dataSource]="dataSource">
     <!--- Note that these columns can be defined in any order.
@@ -53,7 +55,14 @@
     <!-- File Name -->
     <ng-container matColumnDef="fileName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.fileName }}</td>
+      <td
+        mat-cell
+        (click)="showJsonViewer(element)"
+        class="textDecor"
+        *matCellDef="let element"
+      >
+        {{ element.fileName }}
+      </td>
     </ng-container>
 
     <!-- Validation Status Column -->
@@ -61,22 +70,67 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         Validation Status
       </th>
-      <td mat-cell *matCellDef="let element">{{ element.validateStatus }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span *ngIf="showStatusIcon(element, 'SUBMITTED')"
+          ><button mat-icon-button>
+            <i
+              class="material-icons statusIcon"
+              matTooltip="File is SUBMITTED for validation."
+              [matTooltipPosition]="positionOptions[2]"
+            >
+              av_timer
+            </i>
+          </button></span
+        >
+        <span *ngIf="showStatusIcon(element, 'SUCCESS')"
+          ><button mat-icon-button class="green-icon">
+            <i
+              class="material-icons statusIcon"
+              color="green"
+              matTooltip="File validation is SUCCESS."
+              [matTooltipPosition]="positionOptions[2]"
+            >
+              done
+            </i>
+          </button></span
+        >
+        <span *ngIf="showStatusIcon(element, 'ERROR')"
+          ><button
+            mat-icon-button
+            color="warn"
+            (click)="getErrorDetails(element)"
+          >
+            <i
+              class="material-icons statusIcon"
+              matTooltip="File validation falied.Click to view the failed items."
+              [matTooltipPosition]="positionOptions[2]"
+            >
+              warning
+            </i>
+          </button></span
+        >
+        <span>{{ element.validateStatus }}</span>
+      </td>
     </ng-container>
 
-        <!-- Created Date Column -->
+    <!-- Created Date Column -->
     <ng-container matColumnDef="createdDate">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
         Created Date
       </th>
-      <td mat-cell *matCellDef="let element">{{ element.createdDate | date:'short' }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.createdDate | date: 'short' }}
+      </td>
     </ng-container>
-
 
     <ng-container matColumnDef="update">
       <th mat-header-cell *matHeaderCellDef>Refresh</th>
       <td mat-cell *matCellDef="let element">
-      <button mat-icon-button color="primary" (click)="getUpdateDataById(element)">
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="getUpdateDataById(element)"
+        >
           <i class="material-icons">
             refresh
           </i>

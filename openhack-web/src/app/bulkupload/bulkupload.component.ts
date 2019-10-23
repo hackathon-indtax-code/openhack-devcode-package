@@ -1,3 +1,4 @@
+import { ErrordataComponent } from './errordata/errordata.component';
 import { ConfirmComponent } from './../confirm/confirm.component';
 import { Filemetadata } from './../filemetadata';
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
@@ -8,6 +9,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { JsonviewComponent } from './jsonview/jsonview.component';
+import { ErrorbarComponent } from './errorbar/errorbar.component';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-bulkupload',
@@ -27,6 +31,14 @@ export class BulkuploadComponent implements OnInit {
   dataSource = new MatTableDataSource<Filemetadata>();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  positionOptions: TooltipPosition[] = [
+    'after',
+    'before',
+    'above',
+    'below',
+    'left',
+    'right'
+  ];
 
   constructor(
     private appService: AppService,
@@ -53,11 +65,15 @@ export class BulkuploadComponent implements OnInit {
         };
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        if(type === 'REFRESH') {
-        this.snackBar.open( this.dataSource.data.length + ' files data is refreshed.', 'Close', {
-         duration: 2000,
-      });
-    }
+        if (type === 'REFRESH') {
+          this.snackBar.open(
+            this.dataSource.data.length + ' files data is refreshed.',
+            'Close',
+            {
+              duration: 2000
+            }
+          );
+        }
 
         console.log('Data : ' + response.toString);
       },
@@ -73,8 +89,6 @@ export class BulkuploadComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minHeight = '500px';
-    dialogConfig.minWidth = '500px';
     dialogConfig.panelClass = 'mat-dialog-override';
     const dialogRef = this.dialog.open(UploadComponent, dialogConfig);
 
@@ -86,24 +100,30 @@ export class BulkuploadComponent implements OnInit {
         }
         this.dataSource.data = [...this.dataSource.data];
         this.snackBar.open(data.length + ' files uploaded.', 'Close', {
-         duration: 2000,
-      });
+          duration: 2000
+        });
       }
     });
   }
 
   getUpdateDataById(currentElement) {
     const validateId = currentElement.id;
-    let responseData: any  = {};
+    let responseData: any = {};
     this.appService.getUpdateDataById(validateId).subscribe(
       data => {
-        if ( data ) {
+        if (data) {
           responseData = data;
-          this.dataSource.data[this.getIndexfromdataSource(validateId)].validateStatus = responseData.validateStatus;
+          this.dataSource.data[
+            this.getIndexfromdataSource(validateId)
+          ].validateStatus = responseData.validateStatus;
           this.dataSource.data = [...this.dataSource.data];
-          this.snackBar.open(currentElement.fileName + ' data refreshed.', 'Close', {
-         duration: 2000,
-      });
+          this.snackBar.open(
+            currentElement.fileName + ' data refreshed.',
+            'Close',
+            {
+              duration: 2000
+            }
+          );
         }
         console.log('Id data' + data);
       },
@@ -121,8 +141,8 @@ export class BulkuploadComponent implements OnInit {
         );
         this.dataSource.data = [...this.dataSource.data];
         this.snackBar.open(validateFileObj.fileName + ' is deleted.', 'Close', {
-         duration: 2000,
-      });
+          duration: 2000
+        });
         console.log(response);
       },
       error => console.log(error),
@@ -133,27 +153,26 @@ export class BulkuploadComponent implements OnInit {
   }
 
   deleteAllValidateFielData() {
-        const dialogRef = this.dialog.open(ConfirmComponent, {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
       width: '350px',
       data: 'Do you confirm the deletion?'
     });
-        dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Yes clicked');
         this.appService.deleteAllValidateFielData().subscribe(
-      response => {
-        console.log('complete data deleted');
-        const dataSourceLength = this.dataSource.data.length;
-        this.dataSource.data = [];
-        this.snackBar.open(dataSourceLength + ' items deleted.', 'Close', {
-         duration: 2000,
-      });
-      },
-      error => console.log('error in data deletion')
-    );
+          response => {
+            console.log('complete data deleted');
+            const dataSourceLength = this.dataSource.data.length;
+            this.dataSource.data = [];
+            this.snackBar.open(dataSourceLength + ' items deleted.', 'Close', {
+              duration: 2000
+            });
+          },
+          error => console.log('error in data deletion')
+        );
       }
     });
-
   }
 
   getIndexfromdataSource(validateFileId) {
@@ -166,5 +185,54 @@ export class BulkuploadComponent implements OnInit {
 
   refresh() {
     this.changeDetectorRefs.detectChanges();
+  }
+
+  showJsonViewer(currentElement) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.panelClass = 'mat-dialog-override';
+    try {
+      dialogConfig.data = { jsonData: JSON.parse(currentElement.jsonData) };
+    } catch (error) {
+      this.snackBar.openFromComponent(ErrorbarComponent, {
+        duration: 5000
+      });
+      return;
+    }
+
+    const dialogRef = this.dialog.open(JsonviewComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  getErrorDetails(currentElement) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.minHeight = '500px';
+    dialogConfig.minWidth = '500px';
+
+    dialogConfig.data = {
+      errorDataList: currentElement.errorDataList
+    };
+
+    const dialogRef = this.dialog.open(ErrordataComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  showStatusIcon(currentElement, validStatus) {
+    let isValidStatus = false;
+    if (currentElement.validateStatus === validStatus) {
+      isValidStatus = true;
+    }
+    return isValidStatus;
   }
 }

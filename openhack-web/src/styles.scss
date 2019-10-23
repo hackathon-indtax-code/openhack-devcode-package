@@ -1,4 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+/* Add application styles & imports to this file! */
+@import "~jsoneditor/dist/jsoneditor.min.css";
+
+// You can't upload images to stackblitz
+div.jsoneditor-menu > button {
+  background-image: url("https://jsoneditoronline.org/img/jsoneditor-icons.svg");
+}
 
 html,
 body {
@@ -61,3 +68,16 @@ th.mat-sort-header-sorted {
   }
 }
 
+.mat-column-fileName:hover {
+  text-decoration: underline !important;
+  cursor: pointer !important;
+}
+
+.statusIcon {
+  position: relative;
+  right: 10px;
+}
+
+.green-icon {
+  color: green;
+}

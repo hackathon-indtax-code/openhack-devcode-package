@@ -20,12 +20,25 @@ import { MatTableModule } from '@angular/material/table';
 import { UploadComponent } from './bulkupload/upload/upload.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import {MAT_DIALOG_DEFAULT_OPTIONS} from '@angular/material';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfirmComponent } from './confirm/confirm.component';
+import { JsonviewComponent } from './bulkupload/jsonview/jsonview.component';
+import { NgJsonEditorModule } from 'ang-jsoneditor';
+import { ErrorbarComponent } from './bulkupload/errorbar/errorbar.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ErrordataComponent } from './bulkupload/errordata/errordata.component';
 
 @NgModule({
-  declarations: [AppComponent, BulkuploadComponent, UploadComponent, ConfirmComponent],
+  declarations: [
+    AppComponent,
+    BulkuploadComponent,
+    UploadComponent,
+    ConfirmComponent,
+    JsonviewComponent,
+    ErrorbarComponent,
+    ErrordataComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -40,13 +53,27 @@ import { ConfirmComponent } from './confirm/confirm.component';
     HttpClientModule,
     FormsModule,
     FlexLayoutModule,
-    MatTableModule, MatSortModule , MatPaginatorModule , MatSnackBarModule
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatSnackBarModule,
+    NgJsonEditorModule,
+    MatTooltipModule
   ],
-  providers: [ {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {panelClass: 'mat-dialog-override'}}],
+  providers: [
+    {
+      provide: MAT_DIALOG_DEFAULT_OPTIONS,
+      useValue: { panelClass: 'mat-dialog-override' }
+    }
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
   entryComponents: [
-    UploadComponent, ConfirmComponent
-]
+    UploadComponent,
+    ConfirmComponent,
+    JsonviewComponent,
+    ErrorbarComponent,
+    ErrordataComponent
+  ]
 })
 export class AppModule {}
