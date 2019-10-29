@@ -80,8 +80,6 @@ export class BulkuploadComponent implements OnInit {
             }
           );
         }
-
-        console.log('Data : ' + response.toString);
       },
       error => console.log('error : ' + error),
       () => {
@@ -102,7 +100,7 @@ export class BulkuploadComponent implements OnInit {
     dialogConfig.minHeight = '200px';
     dialogConfig.minWidth = '500px';
     dialogConfig.panelClass = 'mat-dialog-override';
-    dialogConfig.data = {schemaType : this.schemaModalValue };
+    dialogConfig.data = { schemaType: this.schemaModalValue };
     const dialogRef = this.dialog.open(UploadComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => {
@@ -172,7 +170,6 @@ export class BulkuploadComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Yes clicked');
         this.appService.deleteAllValidateFielData().subscribe(
           response => {
             console.log('complete data deleted');

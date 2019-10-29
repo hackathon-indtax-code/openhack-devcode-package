@@ -39,7 +39,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div\n  class=\"container\"\n  fxLayout=\"row\"\n  fxLayoutAlign=\"space-around center\"\n  style=\"padding:10px;\"\n>\n  <button\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"openUploadDialog()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>add</mat-icon>\n    Choose Files\n  </button>\n\n  <button\n    [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"getValidatedFilesData('REFRESH')\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>refresh</mat-icon>\n    Refresh All\n  </button>\n\n  <button\n    [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"deleteAllValidateFielData()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>delete</mat-icon>\n    Delete All\n  </button>\n</div>\n\n<div\n  class=\"container mat-elevation-z8\"\n  fxLayout=\"column\"\n  style=\"margin-left: 10px;margin-right: 10px;\"\n>\n  <table mat-table matSort [dataSource]=\"dataSource\">\n    <!--- Note that these columns can be defined in any order.\n        The actual rendered columns are set as a property on the row definition\" -->\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n      <th mat-header-cell *matHeaderCellDef>No.</th>\n      <td mat-cell *matCellDef=\"let element; let i = index\">{{ i + 1 }}</td>\n    </ng-container>\n\n    <!-- File Name -->\n    <ng-container matColumnDef=\"fileName\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>\n      <td\n        mat-cell\n        (click)=\"showJsonViewer(element)\"\n        class=\"textDecor\"\n        *matCellDef=\"let element\"\n      >\n        {{ element.fileName }}\n      </td>\n    </ng-container>\n\n    <!-- Validation Status Column -->\n    <ng-container matColumnDef=\"validateStatus\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Validation Status\n      </th>\n      <td mat-cell *matCellDef=\"let element\">\n        <span *ngIf=\"showStatusIcon(element, 'SUBMITTED')\"\n          ><button mat-icon-button>\n            <i\n              class=\"material-icons statusIcon\"\n              matTooltip=\"File is SUBMITTED for validation.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              av_timer\n            </i>\n          </button></span\n        >\n        <span *ngIf=\"showStatusIcon(element, 'SUCCESS')\"\n          ><button mat-icon-button class=\"green-icon\">\n            <i\n              class=\"material-icons statusIcon\"\n              color=\"green\"\n              matTooltip=\"File validation is SUCCESS.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              done\n            </i>\n          </button></span\n        >\n        <span *ngIf=\"showStatusIcon(element, 'ERROR')\"\n          ><button\n            mat-icon-button\n            color=\"warn\"\n            (click)=\"getErrorDetails(element)\"\n          >\n            <i\n              class=\"material-icons statusIcon\"\n              matTooltip=\"File validation falied.Click to view the failed items.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              warning\n            </i>\n          </button></span\n        >\n        <span>{{ element.validateStatus }}</span>\n      </td>\n    </ng-container>\n\n    <!-- Created Date Column -->\n    <ng-container matColumnDef=\"createdDate\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Created Date\n      </th>\n      <td mat-cell *matCellDef=\"let element\">\n        {{ element.createdDate | date: 'short' }}\n      </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"update\">\n      <th mat-header-cell *matHeaderCellDef>Refresh</th>\n      <td mat-cell *matCellDef=\"let element\">\n        <button\n          mat-icon-button\n          color=\"primary\"\n          (click)=\"getUpdateDataById(element)\"\n        >\n          <i class=\"material-icons\">\n            refresh\n          </i>\n        </button>\n      </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"delete\">\n      <th mat-header-cell *matHeaderCellDef>Delete</th>\n      <td mat-cell *matCellDef=\"let element\">\n        <button\n          mat-icon-button\n          color=\"primary\"\n          (click)=\"deleteValidateFileData(element)\"\n        >\n          <mat-icon class=\"mat-18\">delete</mat-icon>\n        </button>\n      </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns\"></tr>\n  </table>\n\n  <mat-paginator\n    [pageSizeOptions]=\"[5, 10, 20]\"\n    showFirstLastButtons\n  ></mat-paginator>\n</div>\n");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div\n  class=\"container\"\n  fxLayout=\"row\"\n  fxLayoutAlign=\"space-around center\"\n  style=\"padding:10px;\"\n>\n  <mat-form-field>\n    <mat-label>Schema Type</mat-label>\n    <mat-select [(ngModel)]=\"schemaModalValue\" (selectionChange)=\"onSchemaChnage($event.value)\">\n      <mat-option\n        *ngFor=\"let schema of itrSchemaType\"\n        [required]=\"true\"\n        [(value)]=\"schema.value\"\n      >\n        {{ schema.viewValue }}\n      </mat-option>\n    </mat-select>\n  </mat-form-field>\n\n  <button [disabled]=\"!schemaModalValue\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"openUploadDialog()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>add</mat-icon>\n    Choose Files\n  </button>\n\n  <button\n    [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"getValidatedFilesData('REFRESH')\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>refresh</mat-icon>\n    Refresh All\n  </button>\n\n  <button\n    [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"deleteAllValidateFielData()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>delete</mat-icon>\n    Delete All\n  </button>\n</div>\n\n<div\n  class=\"container mat-elevation-z8\"\n  fxLayout=\"column\"\n  style=\"margin-left: 10px;margin-right: 10px;\"\n>\n  <table mat-table matSort [dataSource]=\"dataSource\">\n    <!--- Note that these columns can be defined in any order.\n        The actual rendered columns are set as a property on the row definition\" -->\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n      <th mat-header-cell *matHeaderCellDef>No.</th>\n      <td mat-cell *matCellDef=\"let element; let i = index\">{{ i + 1 }}</td>\n    </ng-container>\n\n    <!-- File Name -->\n    <ng-container matColumnDef=\"fileName\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>\n      <td\n        mat-cell\n        (click)=\"showJsonViewer(element)\"\n        class=\"textDecor\"\n        *matCellDef=\"let element\"\n      >\n        {{ element.fileName }}\n      </td>\n    </ng-container>\n\n    <!-- Validation Status Column -->\n    <ng-container matColumnDef=\"validateStatus\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Validation Status\n      </th>\n      <td mat-cell *matCellDef=\"let element\">\n        <span *ngIf=\"showStatusIcon(element, 'SUBMITTED')\"\n          ><button mat-icon-button>\n            <i\n              class=\"material-icons statusIcon\"\n              matTooltip=\"File is SUBMITTED for validation.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              av_timer\n            </i>\n          </button></span\n        >\n        <span *ngIf=\"showStatusIcon(element, 'SUCCESS')\"\n          ><button mat-icon-button class=\"green-icon\">\n            <i\n              class=\"material-icons statusIcon\"\n              color=\"green\"\n              matTooltip=\"File validation is SUCCESS.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              done\n            </i>\n          </button></span\n        >\n        <span *ngIf=\"showStatusIcon(element, 'ERROR')\"\n          ><button\n            mat-icon-button\n            color=\"warn\"\n            (click)=\"getErrorDetails(element)\"\n          >\n            <i\n              class=\"material-icons statusIcon\"\n              matTooltip=\"File validation falied.Click to view the failed items.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              warning\n            </i>\n          </button></span\n        >\n        <span>{{ element.validateStatus }}</span>\n      </td>\n    </ng-container>\n\n    <!-- Created Date Column -->\n    <ng-container matColumnDef=\"createdDate\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Created Date\n      </th>\n      <td mat-cell *matCellDef=\"let element\">\n        {{ element.createdDate | date: 'short' }}\n      </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"update\">\n      <th mat-header-cell *matHeaderCellDef>Refresh</th>\n      <td mat-cell *matCellDef=\"let element\">\n        <button\n          mat-icon-button\n          color=\"primary\"\n          (click)=\"getUpdateDataById(element)\"\n        >\n          <i class=\"material-icons\">\n            refresh\n          </i>\n        </button>\n      </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"delete\">\n      <th mat-header-cell *matHeaderCellDef>Delete</th>\n      <td mat-cell *matCellDef=\"let element\">\n        <button\n          mat-icon-button\n          color=\"primary\"\n          (click)=\"deleteValidateFileData(element)\"\n        >\n          <mat-icon class=\"mat-18\">delete</mat-icon>\n        </button>\n      </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns\"></tr>\n  </table>\n\n  <mat-paginator\n    [pageSizeOptions]=\"[5, 10, 20]\"\n    showFirstLastButtons\n  ></mat-paginator>\n</div>\n");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errorbar/errorbar.component.html": 
@@ -83,7 +83,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<mat-toolbar role=\"heading\" color=\"primary\" class=\"mat-elevation-z6 tbar\">\n  <mat-toolbar-row>\n    <h1>File Upload For Validation</h1>\n    <div style=\"flex-grow: 1\"></div>\n    <i class=\"material-icons\">\n      cloud_upload\n    </i>\n  </mat-toolbar-row>\n</mat-toolbar>\n<mat-dialog-content>\n  <div fxLayout=\"row\" fxLayoutAlign=\"start center\" style=\"padding-top: 10px;\">\n    <button mat-raised-button color=\"primary\" (click)=\"onClick($event)\">\n      <mat-icon>add</mat-icon>\n      Add Files\n    </button>\n    <input\n      #fileUpload\n      type=\"file\"\n      class=\"input_fileupload--hidden\"\n      (input)=\"onInput($event)\"\n      (change)=\"onFileSelected($event)\"\n      [(ngModel)]=\"inputFileName\"\n      [accept]=\"accept\"\n      [multiple]=\"multiple\"\n    />\n    <div style=\"flex-grow: 1\"></div>\n    <button\n      [disabled]=\"files.length === 0\"\n      mat-raised-button\n      color=\"primary\"\n      (click)=\"removeSelectedFiles(files)\"\n      class=\"buttonPosition\"\n    >\n      <mat-icon>delete</mat-icon>\n      Delete All\n    </button>\n  </div>\n\n  <mat-list>\n    <mat-list-item *ngFor=\"let file of files; let i = index\">\n      <span matLine style=\"display: flex;\"\n        ><span>{{ i + 1 }}. </span><span>{{ file.name }}</span>\n        <div style=\"flex-grow: 1\"></div>\n        <span\n          ><i\n            class=\"material-icons\"\n            style=\"cursor: pointer;\"\n            (click)=\"removeFile($event, file)\"\n          >\n            delete\n          </i></span\n        ></span\n      >\n    </mat-list-item>\n  </mat-list>\n</mat-dialog-content>\n<div mat-dialog-actions align=\"end\">\n  <button\n    color=\"warm\"\n    class=\"mat-raised-button\"\n    [disabled]=\"!files || files.length === 0\"\n    (click)=\"uploadFiles(files)\"\n  >\n    Upload Files\n  </button>\n  <button\n    style=\"margin-left:10px;\"\n    mat-button\n    [mat-dialog-close]=\"files\"\n    cdkFocusInitial\n  >\n    Close\n  </button>\n</div>\n");
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-toolbar role=\"heading\" color=\"primary\" class=\"mat-elevation-z6 tbar\">\n  <mat-toolbar-row>\n    <h1>File Upload For Validation</h1>\n    <div style=\"flex-grow: 1\"></div>\n    <i class=\"material-icons\">\n      cloud_upload\n    </i>\n  </mat-toolbar-row>\n</mat-toolbar>\n<mat-dialog-content>\n  <div fxLayout=\"row\" fxLayoutAlign=\"start center\" style=\"padding-top: 10px;\">\n    <button mat-raised-button color=\"primary\" (click)=\"onClick($event)\">\n      <mat-icon>add</mat-icon>\n      Add Files\n    </button>\n    <input\n      #fileUpload\n      type=\"file\"\n      class=\"input_fileupload--hidden\"\n      (input)=\"onInput($event)\"\n      (change)=\"onFileSelected($event)\"\n      [(ngModel)]=\"inputFileName\"\n      [accept]=\"accept\"\n      [multiple]=\"multiple\"\n    />\n    <div style=\"flex-grow: 1\"></div>\n    <!-- <button\n      [disabled]=\"files.length === 0\"\n      mat-raised-button\n      color=\"primary\"\n      (click)=\"removeSelectedFiles(files)\"\n      class=\"buttonPosition\"\n    >\n      <mat-icon>delete</mat-icon>\n      Delete All\n    </button> -->\n  </div>\n\n  <mat-list>\n    <mat-list-item *ngFor=\"let file of files; let i = index\">\n      <span matLine style=\"display: flex;\"\n        ><span>{{ i + 1 }}. </span><span>{{ file.name }}</span>\n        <div style=\"flex-grow: 1\"></div>\n        <span\n          ><i\n            class=\"material-icons\"\n            style=\"cursor: pointer;\"\n            (click)=\"removeFile($event, file)\"\n          >\n            delete\n          </i></span\n        ></span\n      >\n    </mat-list-item>\n  </mat-list>\n</mat-dialog-content>\n<div mat-dialog-actions>\n  <button\n    color=\"warm\"\n    class=\"mat-raised-button\"\n    [disabled]=\"!files || files.length === 0\"\n    (click)=\"uploadFiles(files)\"\n  >\n    Upload Files\n  </button>\n  <button\n    style=\"margin-left:10px;\"\n    mat-button\n    [mat-dialog-close]=\"files\"\n    cdkFocusInitial\n  >\n    Close\n  </button>\n</div>\n");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/confirm/confirm.component.html": 
@@ -401,34 +401,34 @@
         /*!***************************************!*\
           !*** ./src/app/app-routing.module.ts ***!
           \***************************************/
-        /*! exports provided: AppRoutingModule */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppRoutingModule", function () { return AppRoutingModule; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-            /* harmony import */ var _bulkupload_bulkupload_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./bulkupload/bulkupload.component */ "./src/app/bulkupload/bulkupload.component.ts");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+            var bulkupload_component_1 = __webpack_require__(/*! ./bulkupload/bulkupload.component */ "./src/app/bulkupload/bulkupload.component.ts");
             var routes = [
-                { path: 'bulkupload', component: _bulkupload_bulkupload_component__WEBPACK_IMPORTED_MODULE_3__["BulkuploadComponent"] },
+                { path: 'bulkupload', component: bulkupload_component_1.BulkuploadComponent },
                 { path: '',
                     redirectTo: '/bulkupload',
                     pathMatch: 'full'
                 },
-                { path: '**', component: _bulkupload_bulkupload_component__WEBPACK_IMPORTED_MODULE_3__["BulkuploadComponent"] }
+                { path: '**', component: bulkupload_component_1.BulkuploadComponent }
             ];
             var AppRoutingModule = /** @class */ (function () {
                 function AppRoutingModule() {
                 }
                 return AppRoutingModule;
             }());
-            AppRoutingModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-                    imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"].forRoot(routes)],
-                    exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterModule"]]
+            AppRoutingModule = tslib_1.__decorate([
+                core_1.NgModule({
+                    imports: [router_1.RouterModule.forRoot(routes)],
+                    exports: [router_1.RouterModule]
                 })
             ], AppRoutingModule);
+            exports.AppRoutingModule = AppRoutingModule;
             /***/ 
         }),
         /***/ "./src/app/app.component.css": 
@@ -446,137 +446,141 @@
         /*!**********************************!*\
           !*** ./src/app/app.component.ts ***!
           \**********************************/
-        /*! exports provided: AppComponent */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function () { return AppComponent; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
             var AppComponent = /** @class */ (function () {
                 function AppComponent() {
                     this.title = 'Open Hack';
                 }
                 return AppComponent;
             }());
-            AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            AppComponent = tslib_1.__decorate([
+                core_1.Component({
                     selector: 'app-root',
-                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./app.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html")).default,
-                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")).default]
+                    template: tslib_1.__importDefault(__webpack_require__(/*! raw-loader!./app.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/app.component.html")).default,
+                    styles: [tslib_1.__importDefault(__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")).default]
                 })
             ], AppComponent);
+            exports.AppComponent = AppComponent;
             /***/ 
         }),
         /***/ "./src/app/app.module.ts": 
         /*!*******************************!*\
           !*** ./src/app/app.module.ts ***!
           \*******************************/
-        /*! exports provided: AppModule */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppModule", function () { return AppModule; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-            /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-            /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm2015/animations.js");
-            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
-            /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
-            /* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
-            /* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/sidenav */ "./node_modules/@angular/material/esm2015/sidenav.js");
-            /* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
-            /* harmony import */ var _bulkupload_bulkupload_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./bulkupload/bulkupload.component */ "./src/app/bulkupload/bulkupload.component.ts");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-            /* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
-            /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
-            /* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
-            /* harmony import */ var _angular_flex_layout__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/flex-layout */ "./node_modules/@angular/flex-layout/esm2015/flex-layout.js");
-            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-            /* harmony import */ var _bulkupload_upload_upload_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./bulkupload/upload/upload.component */ "./src/app/bulkupload/upload/upload.component.ts");
-            /* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
-            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-            /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm2015/material.js");
-            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
-            /* harmony import */ var _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./confirm/confirm.component */ "./src/app/confirm/confirm.component.ts");
-            /* harmony import */ var _bulkupload_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./bulkupload/jsonview/jsonview.component */ "./src/app/bulkupload/jsonview/jsonview.component.ts");
-            /* harmony import */ var ang_jsoneditor__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ang-jsoneditor */ "./node_modules/ang-jsoneditor/fesm2015/ang-jsoneditor.js");
-            /* harmony import */ var _bulkupload_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./bulkupload/errorbar/errorbar.component */ "./src/app/bulkupload/errorbar/errorbar.component.ts");
-            /* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm2015/tooltip.js");
-            /* harmony import */ var _bulkupload_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./bulkupload/errordata/errordata.component */ "./src/app/bulkupload/errordata/errordata.component.ts");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var platform_browser_1 = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var app_routing_module_1 = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+            var app_component_1 = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+            var animations_1 = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm2015/animations.js");
+            var http_1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            var forms_1 = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+            var toolbar_1 = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
+            var sidenav_1 = __webpack_require__(/*! @angular/material/sidenav */ "./node_modules/@angular/material/esm2015/sidenav.js");
+            var list_1 = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
+            var bulkupload_component_1 = __webpack_require__(/*! ./bulkupload/bulkupload.component */ "./src/app/bulkupload/bulkupload.component.ts");
+            var dialog_1 = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            var icon_1 = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
+            var button_1 = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
+            var card_1 = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
+            var core_2 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var flex_layout_1 = __webpack_require__(/*! @angular/flex-layout */ "./node_modules/@angular/flex-layout/esm2015/flex-layout.js");
+            var table_1 = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            var upload_component_1 = __webpack_require__(/*! ./bulkupload/upload/upload.component */ "./src/app/bulkupload/upload/upload.component.ts");
+            var sort_1 = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
+            var paginator_1 = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            var material_1 = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm2015/material.js");
+            var snack_bar_1 = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            var confirm_component_1 = __webpack_require__(/*! ./confirm/confirm.component */ "./src/app/confirm/confirm.component.ts");
+            var jsonview_component_1 = __webpack_require__(/*! ./bulkupload/jsonview/jsonview.component */ "./src/app/bulkupload/jsonview/jsonview.component.ts");
+            var ang_jsoneditor_1 = __webpack_require__(/*! ang-jsoneditor */ "./node_modules/ang-jsoneditor/fesm2015/ang-jsoneditor.js");
+            var errorbar_component_1 = __webpack_require__(/*! ./bulkupload/errorbar/errorbar.component */ "./src/app/bulkupload/errorbar/errorbar.component.ts");
+            var tooltip_1 = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm2015/tooltip.js");
+            var errordata_component_1 = __webpack_require__(/*! ./bulkupload/errordata/errordata.component */ "./src/app/bulkupload/errordata/errordata.component.ts");
+            var select_1 = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
             var AppModule = /** @class */ (function () {
                 function AppModule() {
                 }
                 return AppModule;
             }());
-            AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
+            AppModule = tslib_1.__decorate([
+                core_1.NgModule({
                     declarations: [
-                        _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
-                        _bulkupload_bulkupload_component__WEBPACK_IMPORTED_MODULE_11__["BulkuploadComponent"],
-                        _bulkupload_upload_upload_component__WEBPACK_IMPORTED_MODULE_18__["UploadComponent"],
-                        _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__["ConfirmComponent"],
-                        _bulkupload_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_24__["JsonviewComponent"],
-                        _bulkupload_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_26__["ErrorbarComponent"],
-                        _bulkupload_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_28__["ErrordataComponent"]
+                        app_component_1.AppComponent,
+                        bulkupload_component_1.BulkuploadComponent,
+                        upload_component_1.UploadComponent,
+                        confirm_component_1.ConfirmComponent,
+                        jsonview_component_1.JsonviewComponent,
+                        errorbar_component_1.ErrorbarComponent,
+                        errordata_component_1.ErrordataComponent
                     ],
                     imports: [
-                        _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-                        _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
-                        _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_5__["BrowserAnimationsModule"],
-                        _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_8__["MatToolbarModule"],
-                        _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_9__["MatSidenavModule"],
-                        _angular_material_list__WEBPACK_IMPORTED_MODULE_10__["MatListModule"],
-                        _angular_material_dialog__WEBPACK_IMPORTED_MODULE_12__["MatDialogModule"],
-                        _angular_material_icon__WEBPACK_IMPORTED_MODULE_13__["MatIconModule"],
-                        _angular_material_button__WEBPACK_IMPORTED_MODULE_14__["MatButtonModule"],
-                        _angular_material_card__WEBPACK_IMPORTED_MODULE_15__["MatCardModule"],
-                        _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClientModule"],
-                        _angular_forms__WEBPACK_IMPORTED_MODULE_7__["FormsModule"],
-                        _angular_flex_layout__WEBPACK_IMPORTED_MODULE_16__["FlexLayoutModule"],
-                        _angular_material_table__WEBPACK_IMPORTED_MODULE_17__["MatTableModule"],
-                        _angular_material_sort__WEBPACK_IMPORTED_MODULE_19__["MatSortModule"],
-                        _angular_material_paginator__WEBPACK_IMPORTED_MODULE_20__["MatPaginatorModule"],
-                        _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_22__["MatSnackBarModule"],
-                        ang_jsoneditor__WEBPACK_IMPORTED_MODULE_25__["NgJsonEditorModule"],
-                        _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_27__["MatTooltipModule"]
+                        platform_browser_1.BrowserModule,
+                        app_routing_module_1.AppRoutingModule,
+                        animations_1.BrowserAnimationsModule,
+                        toolbar_1.MatToolbarModule,
+                        sidenav_1.MatSidenavModule,
+                        list_1.MatListModule,
+                        dialog_1.MatDialogModule,
+                        icon_1.MatIconModule,
+                        button_1.MatButtonModule,
+                        card_1.MatCardModule,
+                        http_1.HttpClientModule,
+                        forms_1.FormsModule,
+                        flex_layout_1.FlexLayoutModule,
+                        table_1.MatTableModule,
+                        sort_1.MatSortModule,
+                        paginator_1.MatPaginatorModule,
+                        snack_bar_1.MatSnackBarModule,
+                        ang_jsoneditor_1.NgJsonEditorModule,
+                        tooltip_1.MatTooltipModule,
+                        select_1.MatSelectModule
                     ],
                     providers: [
                         {
-                            provide: _angular_material__WEBPACK_IMPORTED_MODULE_21__["MAT_DIALOG_DEFAULT_OPTIONS"],
+                            provide: material_1.MAT_DIALOG_DEFAULT_OPTIONS,
                             useValue: { panelClass: 'mat-dialog-override' }
                         }
                     ],
-                    schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_ELEMENTS_SCHEMA"]],
-                    bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]],
+                    schemas: [core_2.CUSTOM_ELEMENTS_SCHEMA],
+                    bootstrap: [app_component_1.AppComponent],
                     entryComponents: [
-                        _bulkupload_upload_upload_component__WEBPACK_IMPORTED_MODULE_18__["UploadComponent"],
-                        _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__["ConfirmComponent"],
-                        _bulkupload_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_24__["JsonviewComponent"],
-                        _bulkupload_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_26__["ErrorbarComponent"],
-                        _bulkupload_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_28__["ErrordataComponent"]
+                        upload_component_1.UploadComponent,
+                        confirm_component_1.ConfirmComponent,
+                        jsonview_component_1.JsonviewComponent,
+                        errorbar_component_1.ErrorbarComponent,
+                        errordata_component_1.ErrordataComponent
                     ]
                 })
             ], AppModule);
+            exports.AppModule = AppModule;
             /***/ 
         }),
         /***/ "./src/app/app.service.ts": 
         /*!********************************!*\
           !*** ./src/app/app.service.ts ***!
           \********************************/
-        /*! exports provided: AppService */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppService", function () { return AppService; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var validation_service_1 = __webpack_require__(/*! ./bulkupload/validation.service */ "./src/app/bulkupload/validation.service.ts");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var http_1 = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
             var AppService = /** @class */ (function () {
-                function AppService(http) {
+                function AppService(http, validateService) {
                     this.http = http;
+                    this.validateService = validateService;
                     this.apiUrl = 'http://localhost:8080';
                 }
                 AppService.prototype.getValidatedFilesData = function () {
@@ -585,12 +589,10 @@
                 AppService.prototype.getUpdateDataById = function (validateId) {
                     return this.http.get(this.apiUrl + '/api/getFileValidateDataById/' + validateId);
                 };
-                AppService.prototype.uploadFileData = function (selectedFilesData) {
+                AppService.prototype.uploadFileData = function (selectedFilesData, errorData) {
                     var formData = new FormData();
-                    for (var _i = 0, selectedFilesData_1 = selectedFilesData; _i < selectedFilesData_1.length; _i++) {
-                        var fileData = selectedFilesData_1[_i];
-                        formData.append('files', fileData);
-                    }
+                    formData.append('files', selectedFilesData);
+                    formData.append('errors', JSON.stringify(errorData));
                     return this.http.post(this.apiUrl + '/api/uploadMultipleFiles', formData);
                 };
                 AppService.prototype.deleteValidateFileData = function (validateFileObj) {
@@ -603,13 +605,15 @@
                 return AppService;
             }());
             AppService.ctorParameters = function () { return [
-                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] }
+                { type: http_1.HttpClient },
+                { type: validation_service_1.ValidationService }
             ]; };
-            AppService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            AppService = tslib_1.__decorate([
+                core_1.Injectable({
                     providedIn: 'root'
                 })
             ], AppService);
+            exports.AppService = AppService;
             /***/ 
         }),
         /***/ "./src/app/bulkupload/bulkupload.component.css": 
@@ -627,24 +631,23 @@
         /*!****************************************************!*\
           !*** ./src/app/bulkupload/bulkupload.component.ts ***!
           \****************************************************/
-        /*! exports provided: BulkuploadComponent */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BulkuploadComponent", function () { return BulkuploadComponent; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _errordata_errordata_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./errordata/errordata.component */ "./src/app/bulkupload/errordata/errordata.component.ts");
-            /* harmony import */ var _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../confirm/confirm.component */ "./src/app/confirm/confirm.component.ts");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../app.service */ "./src/app/app.service.ts");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-            /* harmony import */ var _upload_upload_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./upload/upload.component */ "./src/app/bulkupload/upload/upload.component.ts");
-            /* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
-            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
-            /* harmony import */ var _jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./jsonview/jsonview.component */ "./src/app/bulkupload/jsonview/jsonview.component.ts");
-            /* harmony import */ var _errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./errorbar/errorbar.component */ "./src/app/bulkupload/errorbar/errorbar.component.ts");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var errordata_component_1 = __webpack_require__(/*! ./errordata/errordata.component */ "./src/app/bulkupload/errordata/errordata.component.ts");
+            var confirm_component_1 = __webpack_require__(/*! ./../confirm/confirm.component */ "./src/app/confirm/confirm.component.ts");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var app_service_1 = __webpack_require__(/*! ../app.service */ "./src/app/app.service.ts");
+            var dialog_1 = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            var upload_component_1 = __webpack_require__(/*! ./upload/upload.component */ "./src/app/bulkupload/upload/upload.component.ts");
+            var sort_1 = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
+            var table_1 = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            var paginator_1 = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            var snack_bar_1 = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            var jsonview_component_1 = __webpack_require__(/*! ./jsonview/jsonview.component */ "./src/app/bulkupload/jsonview/jsonview.component.ts");
+            var errorbar_component_1 = __webpack_require__(/*! ./errorbar/errorbar.component */ "./src/app/bulkupload/errorbar/errorbar.component.ts");
             var BulkuploadComponent = /** @class */ (function () {
                 function BulkuploadComponent(appService, dialog, changeDetectorRefs, snackBar) {
                     this.appService = appService;
@@ -660,7 +663,7 @@
                         'update',
                         'delete'
                     ];
-                    this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_8__["MatTableDataSource"]();
+                    this.dataSource = new table_1.MatTableDataSource();
                     this.positionOptions = [
                         'after',
                         'before',
@@ -668,6 +671,10 @@
                         'below',
                         'left',
                         'right'
+                    ];
+                    this.itrSchemaType = [
+                        { value: 'ITR_SCHEMA_2', viewValue: 'ITR2 Schema' },
+                        { value: 'ITR_SCHEMA_3', viewValue: 'ITR3 Schema' }
                     ];
                 }
                 BulkuploadComponent.prototype.ngOnInit = function () {
@@ -692,18 +699,23 @@
                                 duration: 2000
                             });
                         }
-                        console.log('Data : ' + response.toString);
                     }, function (error) { return console.log('error : ' + error); }, function () {
                         console.log('completed');
                     });
                 };
+                BulkuploadComponent.prototype.onSchemaChnage = function (selectedType) {
+                    console.log('selectedType : ' + selectedType);
+                };
                 BulkuploadComponent.prototype.openUploadDialog = function () {
                     var _this = this;
-                    var dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogConfig"]();
+                    var dialogConfig = new dialog_1.MatDialogConfig();
                     dialogConfig.disableClose = true;
                     dialogConfig.autoFocus = true;
+                    dialogConfig.minHeight = '200px';
+                    dialogConfig.minWidth = '500px';
                     dialogConfig.panelClass = 'mat-dialog-override';
-                    var dialogRef = this.dialog.open(_upload_upload_component__WEBPACK_IMPORTED_MODULE_6__["UploadComponent"], dialogConfig);
+                    dialogConfig.data = { schemaType: this.schemaModalValue };
+                    var dialogRef = this.dialog.open(upload_component_1.UploadComponent, dialogConfig);
                     dialogRef.afterClosed().subscribe(function (data) {
                         console.log('Dialog output:', data);
                         if (data && data.length > 0) {
@@ -750,13 +762,12 @@
                 };
                 BulkuploadComponent.prototype.deleteAllValidateFielData = function () {
                     var _this = this;
-                    var dialogRef = this.dialog.open(_confirm_confirm_component__WEBPACK_IMPORTED_MODULE_2__["ConfirmComponent"], {
+                    var dialogRef = this.dialog.open(confirm_component_1.ConfirmComponent, {
                         width: '350px',
                         data: 'Do you confirm the deletion?'
                     });
                     dialogRef.afterClosed().subscribe(function (result) {
                         if (result) {
-                            console.log('Yes clicked');
                             _this.appService.deleteAllValidateFielData().subscribe(function (response) {
                                 console.log('complete data deleted');
                                 var dataSourceLength = _this.dataSource.data.length;
@@ -779,7 +790,7 @@
                     this.changeDetectorRefs.detectChanges();
                 };
                 BulkuploadComponent.prototype.showJsonViewer = function (currentElement) {
-                    var dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogConfig"]();
+                    var dialogConfig = new dialog_1.MatDialogConfig();
                     dialogConfig.disableClose = true;
                     dialogConfig.autoFocus = true;
                     dialogConfig.panelClass = 'mat-dialog-override';
@@ -787,26 +798,26 @@
                         dialogConfig.data = { jsonData: JSON.parse(currentElement.jsonData) };
                     }
                     catch (error) {
-                        this.snackBar.openFromComponent(_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_12__["ErrorbarComponent"], {
+                        this.snackBar.openFromComponent(errorbar_component_1.ErrorbarComponent, {
                             duration: 5000
                         });
                         return;
                     }
-                    var dialogRef = this.dialog.open(_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_11__["JsonviewComponent"], dialogConfig);
+                    var dialogRef = this.dialog.open(jsonview_component_1.JsonviewComponent, dialogConfig);
                     dialogRef.afterClosed().subscribe(function (result) {
                         console.log('The dialog was closed');
                     });
                 };
                 BulkuploadComponent.prototype.getErrorDetails = function (currentElement) {
-                    var dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogConfig"]();
+                    var dialogConfig = new dialog_1.MatDialogConfig();
                     dialogConfig.disableClose = false;
                     dialogConfig.autoFocus = true;
                     dialogConfig.minHeight = '500px';
-                    dialogConfig.minWidth = '500px';
+                    dialogConfig.minWidth = '800px';
                     dialogConfig.data = {
                         errorDataList: currentElement.errorDataList
                     };
-                    var dialogRef = this.dialog.open(_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_1__["ErrordataComponent"], dialogConfig);
+                    var dialogRef = this.dialog.open(errordata_component_1.ErrordataComponent, dialogConfig);
                     dialogRef.afterClosed().subscribe(function (result) {
                         console.log('The dialog was closed');
                     });
@@ -821,24 +832,25 @@
                 return BulkuploadComponent;
             }());
             BulkuploadComponent.ctorParameters = function () { return [
-                { type: _app_service__WEBPACK_IMPORTED_MODULE_4__["AppService"] },
-                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialog"] },
-                { type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ChangeDetectorRef"] },
-                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_10__["MatSnackBar"] }
+                { type: app_service_1.AppService },
+                { type: dialog_1.MatDialog },
+                { type: core_1.ChangeDetectorRef },
+                { type: snack_bar_1.MatSnackBar }
             ]; };
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_7__["MatSort"], { static: true })
+            tslib_1.__decorate([
+                core_1.ViewChild(sort_1.MatSort, { static: true })
             ], BulkuploadComponent.prototype, "sort", void 0);
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__["MatPaginator"], { static: true })
+            tslib_1.__decorate([
+                core_1.ViewChild(paginator_1.MatPaginator, { static: true })
             ], BulkuploadComponent.prototype, "paginator", void 0);
-            BulkuploadComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+            BulkuploadComponent = tslib_1.__decorate([
+                core_1.Component({
                     selector: 'app-bulkupload',
-                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./bulkupload.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/bulkupload.component.html")).default,
-                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./bulkupload.component.css */ "./src/app/bulkupload/bulkupload.component.css")).default]
+                    template: tslib_1.__importDefault(__webpack_require__(/*! raw-loader!./bulkupload.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/bulkupload.component.html")).default,
+                    styles: [tslib_1.__importDefault(__webpack_require__(/*! ./bulkupload.component.css */ "./src/app/bulkupload/bulkupload.component.css")).default]
                 })
             ], BulkuploadComponent);
+            exports.BulkuploadComponent = BulkuploadComponent;
             /***/ 
         }),
         /***/ "./src/app/bulkupload/errorbar/errorbar.component.css": 
@@ -856,26 +868,26 @@
         /*!***********************************************************!*\
           !*** ./src/app/bulkupload/errorbar/errorbar.component.ts ***!
           \***********************************************************/
-        /*! exports provided: ErrorbarComponent */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrorbarComponent", function () { return ErrorbarComponent; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
             var ErrorbarComponent = /** @class */ (function () {
                 function ErrorbarComponent() {
                 }
                 ErrorbarComponent.prototype.ngOnInit = function () { };
                 return ErrorbarComponent;
             }());
-            ErrorbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            ErrorbarComponent = tslib_1.__decorate([
+                core_1.Component({
                     selector: 'app-errorbar',
-                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./errorbar.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errorbar/errorbar.component.html")).default,
-                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./errorbar.component.css */ "./src/app/bulkupload/errorbar/errorbar.component.css")).default]
+                    template: tslib_1.__importDefault(__webpack_require__(/*! raw-loader!./errorbar.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errorbar/errorbar.component.html")).default,
+                    styles: [tslib_1.__importDefault(__webpack_require__(/*! ./errorbar.component.css */ "./src/app/bulkupload/errorbar/errorbar.component.css")).default]
                 })
             ], ErrorbarComponent);
+            exports.ErrorbarComponent = ErrorbarComponent;
             /***/ 
         }),
         /***/ "./src/app/bulkupload/errordata/errordata.component.css": 
@@ -893,22 +905,21 @@
         /*!*************************************************************!*\
           !*** ./src/app/bulkupload/errordata/errordata.component.ts ***!
           \*************************************************************/
-        /*! exports provided: ErrordataComponent */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrordataComponent", function () { return ErrordataComponent; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-            /* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
-            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var paginator_1 = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            var sort_1 = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
+            var table_1 = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            var dialog_1 = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
             var ErrordataComponent = /** @class */ (function () {
                 function ErrordataComponent(dialogRef, data) {
                     this.dialogRef = dialogRef;
                     this.data = data;
-                    this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_4__["MatTableDataSource"]();
+                    this.dataSource = new table_1.MatTableDataSource();
                     this.displayedColumns = ['position', 'errorType', 'errorDescription'];
                 }
                 ErrordataComponent.prototype.ngOnInit = function () {
@@ -919,23 +930,446 @@
                 return ErrordataComponent;
             }());
             ErrordataComponent.ctorParameters = function () { return [
-                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogRef"] },
-                { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MAT_DIALOG_DATA"],] }] }
+                { type: dialog_1.MatDialogRef },
+                { type: undefined, decorators: [{ type: core_1.Inject, args: [dialog_1.MAT_DIALOG_DATA,] }] }
             ]; };
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_3__["MatSort"], { static: true })
+            tslib_1.__decorate([
+                core_1.ViewChild(sort_1.MatSort, { static: true })
             ], ErrordataComponent.prototype, "sort", void 0);
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
+            tslib_1.__decorate([
+                core_1.ViewChild(paginator_1.MatPaginator, { static: true })
             ], ErrordataComponent.prototype, "paginator", void 0);
-            ErrordataComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            ErrordataComponent = tslib_1.__decorate([
+                core_1.Component({
                     selector: 'app-errordata',
-                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./errordata.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errordata/errordata.component.html")).default,
-                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./errordata.component.css */ "./src/app/bulkupload/errordata/errordata.component.css")).default]
+                    template: tslib_1.__importDefault(__webpack_require__(/*! raw-loader!./errordata.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errordata/errordata.component.html")).default,
+                    styles: [tslib_1.__importDefault(__webpack_require__(/*! ./errordata.component.css */ "./src/app/bulkupload/errordata/errordata.component.css")).default]
                 }),
-                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MAT_DIALOG_DATA"]))
+                tslib_1.__param(1, core_1.Inject(dialog_1.MAT_DIALOG_DATA))
             ], ErrordataComponent);
+            exports.ErrordataComponent = ErrordataComponent;
+            /***/ 
+        }),
+        /***/ "./src/app/bulkupload/itrschema.service.ts": 
+        /*!*************************************************!*\
+          !*** ./src/app/bulkupload/itrschema.service.ts ***!
+          \*************************************************/
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
+            "use strict";
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var ItrschemaService = /** @class */ (function () {
+                function ItrschemaService() {
+                }
+                ItrschemaService.prototype.getITR2Schema = function () {
+                    var itr2Schema = {
+                        definitions: {},
+                        $schema: 'http://json-schema.org/draft-07/schema#',
+                        $id: 'http://example.com/root.json',
+                        type: 'object',
+                        title: 'The Root Schema',
+                        required: ['ITR2'],
+                        properties: {
+                            ITR2: {
+                                $id: '#/properties/ITR2',
+                                type: 'object',
+                                title: 'The Itr2 Schema',
+                                required: ['CreationInfo', 'Form_ITR2', 'PartA_GEN1', 'PartB-TI'],
+                                properties: {
+                                    CreationInfo: {
+                                        $id: '#/properties/ITR2/properties/CreationInfo',
+                                        type: 'object',
+                                        title: 'The Creationinfo Schema',
+                                        required: ['XMLCreationDate'],
+                                        properties: {
+                                            XMLCreationDate: {
+                                                $id: '#/properties/ITR2/properties/CreationInfo/properties/XMLCreationDate',
+                                                type: 'string',
+                                                minLength: 10,
+                                                maxLength: 10,
+                                                title: 'The Xmlcreationdate Schema',
+                                                default: '',
+                                                examples: ['2008-07-15'],
+                                                pattern: '[0-9]{4}-[0-9]{2}-[0-9]{2}'
+                                            }
+                                        }
+                                    },
+                                    Form_ITR2: {
+                                        $id: '#/properties/ITR2/properties/Form_ITR2',
+                                        type: 'object',
+                                        title: 'The Form_itr2 Schema',
+                                        required: ['FormName', 'Description', 'AssessmentYear'],
+                                        properties: {
+                                            FormName: {
+                                                $id: '#/properties/ITR2/properties/Form_ITR2/properties/FormName',
+                                                type: 'string',
+                                                minLength: 5,
+                                                maxLength: 5,
+                                                title: 'The Formname Schema',
+                                                default: '',
+                                                examples: ['ITR-2'],
+                                                pattern: 'ITR-[1-9]{1}'
+                                            },
+                                            Description: {
+                                                $id: '#/properties/ITR2/properties/Form_ITR2/properties/Description',
+                                                type: 'string',
+                                                minLength: 10,
+                                                maxLength: 100,
+                                                title: 'The Description Schema',
+                                                default: '',
+                                                examples: [
+                                                    'For Indls and  HUFs not having Income from Business or Profession'
+                                                ],
+                                                pattern: '^(.*)$'
+                                            },
+                                            AssessmentYear: {
+                                                $id: '#/properties/ITR2/properties/Form_ITR2/properties/AssessmentYear',
+                                                type: 'integer',
+                                                minimum: 2015,
+                                                maximum: 2019,
+                                                title: 'The Assessmentyear Schema',
+                                                default: 0,
+                                                examples: [2008]
+                                            }
+                                        }
+                                    },
+                                    PartA_GEN1: {
+                                        $id: '#/properties/ITR2/properties/PartA_GEN1',
+                                        type: 'object',
+                                        title: 'The Parta_gen1 Schema',
+                                        required: ['PersonalInfo', 'FilingStatus'],
+                                        properties: {
+                                            PersonalInfo: {
+                                                $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo',
+                                                type: 'object',
+                                                title: 'The Personalinfo Schema',
+                                                required: ['AssesseeName', 'PAN', 'Address', 'DOB', 'Gender'],
+                                                properties: {
+                                                    AssesseeName: {
+                                                        $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/AssesseeName',
+                                                        type: 'object',
+                                                        title: 'The Assesseename Schema',
+                                                        required: ['FirstName'],
+                                                        properties: {
+                                                            FirstName: {
+                                                                $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/AssesseeName/properties/FirstName',
+                                                                type: 'string',
+                                                                minLength: 2,
+                                                                maxLength: 25,
+                                                                title: 'The Firstname Schema',
+                                                                default: '',
+                                                                examples: ['AAAAAA'],
+                                                                pattern: '^(.*)$'
+                                                            }
+                                                        }
+                                                    },
+                                                    PAN: {
+                                                        $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/PAN',
+                                                        type: 'string',
+                                                        minLength: 10,
+                                                        maxLength: 10,
+                                                        title: 'The Pan Schema',
+                                                        default: '',
+                                                        examples: ['AAAPA1111A'],
+                                                        pattern: '[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}'
+                                                    },
+                                                    Address: {
+                                                        $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/Address',
+                                                        type: 'object',
+                                                        title: 'The Address Schema',
+                                                        required: ['StateCode', 'PinCode'],
+                                                        properties: {
+                                                            StateCode: {
+                                                                $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/Address/properties/StateCode',
+                                                                type: 'integer',
+                                                                minimum: 0,
+                                                                maximum: 99,
+                                                                title: 'The Statecode Schema',
+                                                                default: 0,
+                                                                examples: [2]
+                                                            },
+                                                            PinCode: {
+                                                                $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/Address/properties/PinCode',
+                                                                type: 'integer',
+                                                                minimum: 100000,
+                                                                maximum: 999999,
+                                                                title: 'The Pincode Schema',
+                                                                default: 0,
+                                                                examples: [111111]
+                                                            }
+                                                        }
+                                                    },
+                                                    DOB: {
+                                                        $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/DOB',
+                                                        type: 'string',
+                                                        minLength: 10,
+                                                        maxLength: 10,
+                                                        title: 'The Dob Schema',
+                                                        default: '',
+                                                        examples: ['1900-01-01'],
+                                                        pattern: '[0-9]{4}-[0-9]{2}-[0-9]{2}'
+                                                    },
+                                                    Gender: {
+                                                        $id: '#/properties/ITR2/properties/PartA_GEN1/properties/PersonalInfo/properties/Gender',
+                                                        type: 'string',
+                                                        minLength: 1,
+                                                        maxLength: 1,
+                                                        title: 'The Gender Schema',
+                                                        default: '',
+                                                        examples: ['F'],
+                                                        pattern: '[MFO]{1}'
+                                                    }
+                                                }
+                                            },
+                                            FilingStatus: {
+                                                $id: '#/properties/ITR2/properties/PartA_GEN1/properties/FilingStatus',
+                                                type: 'object',
+                                                title: 'The Filingstatus Schema',
+                                                required: ['FilingDateTime'],
+                                                properties: {
+                                                    FilingDateTime: {
+                                                        $id: '#/properties/ITR2/properties/PartA_GEN1/properties/FilingStatus/properties/FilingDateTime',
+                                                        type: 'string',
+                                                        minLength: 25,
+                                                        maxLength: 25,
+                                                        title: 'The Filingdatetime Schema',
+                                                        default: '',
+                                                        examples: [''],
+                                                        pattern: '^(.*)$'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    'PartB-TI': {
+                                        $id: '#/properties/ITR2/properties/PartB-TI',
+                                        type: 'object',
+                                        title: 'The Partb-ti Schema',
+                                        required: ['IncFromOS', 'TotalTI'],
+                                        properties: {
+                                            IncFromOS: {
+                                                $id: '#/properties/ITR2/properties/PartB-TI/properties/IncFromOS',
+                                                type: 'object',
+                                                title: 'The Incfromos Schema',
+                                                required: ['IncFromOS1', 'IncFromOS2'],
+                                                properties: {
+                                                    IncFromOS1: {
+                                                        $id: '#/properties/ITR2/properties/PartB-TI/properties/IncFromOS/properties/IncFromOS1',
+                                                        type: 'integer',
+                                                        minimum: 0,
+                                                        maximum: 10000,
+                                                        title: 'The Incfromos1 Schema',
+                                                        default: 0,
+                                                        examples: [1234]
+                                                    },
+                                                    IncFromOS2: {
+                                                        $id: '#/properties/ITR2/properties/PartB-TI/properties/IncFromOS/properties/IncFromOS2',
+                                                        type: 'integer',
+                                                        minimum: 0,
+                                                        maximum: 10000,
+                                                        title: 'The Incfromos2 Schema',
+                                                        default: 0,
+                                                        examples: [2345]
+                                                    }
+                                                }
+                                            },
+                                            TotalTI: {
+                                                $id: '#/properties/ITR2/properties/PartB-TI/properties/TotalTI',
+                                                type: 'integer',
+                                                minimum: 0,
+                                                maximum: 10000,
+                                                title: 'The Totalti Schema',
+                                                default: 0,
+                                                examples: [44354]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    return itr2Schema;
+                };
+                ItrschemaService.prototype.getITR3Schema = function () {
+                    var itr3Schema = {
+                        definitions: {},
+                        $schema: 'http://json-schema.org/draft-07/schema#',
+                        $id: 'http://example.com/root.json',
+                        type: 'object',
+                        title: 'The Root Schema',
+                        required: ['ITR3'],
+                        properties: {
+                            ITR3: {
+                                $id: '#/properties/ITR3',
+                                type: 'object',
+                                title: 'The Itr3 Schema',
+                                required: ['CreationInfo', 'Form_ITR3', 'PartA_GEN1'],
+                                properties: {
+                                    CreationInfo: {
+                                        $id: '#/properties/ITR3/properties/CreationInfo',
+                                        type: 'object',
+                                        title: 'The Creationinfo Schema',
+                                        required: ['XMLCreationDate'],
+                                        properties: {
+                                            XMLCreationDate: {
+                                                $id: '#/properties/ITR3/properties/CreationInfo/properties/XMLCreationDate',
+                                                type: 'string',
+                                                title: 'The Xmlcreationdate Schema',
+                                                default: '',
+                                                examples: ['2008-07-15'],
+                                                pattern: '^(.*)$'
+                                            }
+                                        }
+                                    },
+                                    Form_ITR3: {
+                                        $id: '#/properties/ITR3/properties/Form_ITR3',
+                                        type: 'object',
+                                        title: 'The Form_itr3 Schema',
+                                        required: ['FormName', 'Description', 'AssessmentYear'],
+                                        properties: {
+                                            FormName: {
+                                                $id: '#/properties/ITR3/properties/Form_ITR3/properties/FormName',
+                                                type: 'string',
+                                                minLength: 5,
+                                                maxLength: 5,
+                                                title: 'The Formname Schema',
+                                                default: '',
+                                                examples: ['ITR-2'],
+                                                pattern: 'ITR-[1-9]{1}'
+                                            },
+                                            Description: {
+                                                $id: '#/properties/ITR3/properties/Form_ITR3/properties/Description',
+                                                type: 'string',
+                                                title: 'The Description Schema',
+                                                default: '',
+                                                examples: [
+                                                    'For Indls and  HUFs not having Income from Business or Profession'
+                                                ],
+                                                pattern: '^(.*)$'
+                                            },
+                                            AssessmentYear: {
+                                                $id: '#/properties/ITR3/properties/Form_ITR3/properties/AssessmentYear',
+                                                type: 'integer',
+                                                title: 'The Assessmentyear Schema',
+                                                default: 0,
+                                                examples: [2016]
+                                            }
+                                        }
+                                    },
+                                    PartA_GEN1: {
+                                        $id: '#/properties/ITR3/properties/PartA_GEN1',
+                                        type: 'object',
+                                        title: 'The Parta_gen1 Schema',
+                                        required: ['PersonalInfo', 'FilingStatus'],
+                                        properties: {
+                                            PersonalInfo: {
+                                                $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo',
+                                                type: 'object',
+                                                title: 'The Personalinfo Schema',
+                                                required: ['AssesseeName', 'PAN', 'Address', 'DOB', 'Gender'],
+                                                properties: {
+                                                    AssesseeName: {
+                                                        $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/AssesseeName',
+                                                        type: 'object',
+                                                        title: 'The Assesseename Schema',
+                                                        required: ['FirstName'],
+                                                        properties: {
+                                                            FirstName: {
+                                                                $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/AssesseeName/properties/FirstName',
+                                                                type: 'string',
+                                                                title: 'The Firstname Schema',
+                                                                default: '',
+                                                                examples: ['AAAAAA'],
+                                                                pattern: '^(.*)$'
+                                                            }
+                                                        }
+                                                    },
+                                                    PAN: {
+                                                        $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/PAN',
+                                                        type: 'string',
+                                                        minLength: 10,
+                                                        maxLength: 10,
+                                                        title: 'The Pan Schema',
+                                                        default: '',
+                                                        examples: ['AAAPA1111A'],
+                                                        pattern: '[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}'
+                                                    },
+                                                    Address: {
+                                                        $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/Address',
+                                                        type: 'object',
+                                                        title: 'The Address Schema',
+                                                        required: ['StateCode', 'PinCode'],
+                                                        properties: {
+                                                            StateCode: {
+                                                                $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/Address/properties/StateCode',
+                                                                type: 'integer',
+                                                                title: 'The Statecode Schema',
+                                                                default: 0,
+                                                                examples: [2]
+                                                            },
+                                                            PinCode: {
+                                                                $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/Address/properties/PinCode',
+                                                                type: 'integer',
+                                                                title: 'The Pincode Schema',
+                                                                default: 0,
+                                                                examples: [111111]
+                                                            }
+                                                        }
+                                                    },
+                                                    DOB: {
+                                                        $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/DOB',
+                                                        type: 'string',
+                                                        title: 'The Dob Schema',
+                                                        default: '',
+                                                        examples: ['1900-01-01'],
+                                                        pattern: '^(.*)$'
+                                                    },
+                                                    Gender: {
+                                                        $id: '#/properties/ITR3/properties/PartA_GEN1/properties/PersonalInfo/properties/Gender',
+                                                        type: 'string',
+                                                        minLength: 1,
+                                                        maxLength: 1,
+                                                        title: 'The Gender Schema',
+                                                        default: '',
+                                                        examples: ['F'],
+                                                        pattern: '[MFO]{1}'
+                                                    }
+                                                }
+                                            },
+                                            FilingStatus: {
+                                                $id: '#/properties/ITR3/properties/PartA_GEN1/properties/FilingStatus',
+                                                type: 'object',
+                                                title: 'The Filingstatus Schema',
+                                                required: ['FilingDateTime'],
+                                                properties: {
+                                                    FilingDateTime: {
+                                                        $id: '#/properties/ITR3/properties/PartA_GEN1/properties/FilingStatus/properties/FilingDateTime',
+                                                        type: 'string',
+                                                        title: 'The Filingdatetime Schema',
+                                                        default: '',
+                                                        examples: ['2018-11-13T20:20:39+00:00'],
+                                                        pattern: '^(.*)$'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    return itr3Schema;
+                };
+                return ItrschemaService;
+            }());
+            ItrschemaService = tslib_1.__decorate([
+                core_1.Injectable({
+                    providedIn: 'root'
+                })
+            ], ItrschemaService);
+            exports.ItrschemaService = ItrschemaService;
             /***/ 
         }),
         /***/ "./src/app/bulkupload/jsonview/jsonview.component.css": 
@@ -953,20 +1387,19 @@
         /*!***********************************************************!*\
           !*** ./src/app/bulkupload/jsonview/jsonview.component.ts ***!
           \***********************************************************/
-        /*! exports provided: JsonviewComponent */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonviewComponent", function () { return JsonviewComponent; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-            /* harmony import */ var ang_jsoneditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ang-jsoneditor */ "./node_modules/ang-jsoneditor/fesm2015/ang-jsoneditor.js");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var dialog_1 = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            var ang_jsoneditor_1 = __webpack_require__(/*! ang-jsoneditor */ "./node_modules/ang-jsoneditor/fesm2015/ang-jsoneditor.js");
             var JsonviewComponent = /** @class */ (function () {
                 function JsonviewComponent(dialogRef, data) {
                     this.dialogRef = dialogRef;
                     this.data = data;
-                    this.editorOptions = new ang_jsoneditor__WEBPACK_IMPORTED_MODULE_3__["JsonEditorOptions"]();
+                    this.editorOptions = new ang_jsoneditor_1.JsonEditorOptions();
                     this.editorOptions.mode = 'tree'; // set all allowed modes
                     this.editorOptions.expandAll = true;
                     this.jsonData = this.data.jsonData;
@@ -975,20 +1408,21 @@
                 return JsonviewComponent;
             }());
             JsonviewComponent.ctorParameters = function () { return [
-                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
-                { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
+                { type: dialog_1.MatDialogRef },
+                { type: undefined, decorators: [{ type: core_1.Inject, args: [dialog_1.MAT_DIALOG_DATA,] }] }
             ]; };
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(ang_jsoneditor__WEBPACK_IMPORTED_MODULE_3__["JsonEditorComponent"], { static: true })
+            tslib_1.__decorate([
+                core_1.ViewChild(ang_jsoneditor_1.JsonEditorComponent, { static: true })
             ], JsonviewComponent.prototype, "editor", void 0);
-            JsonviewComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            JsonviewComponent = tslib_1.__decorate([
+                core_1.Component({
                     selector: 'app-jsonview',
-                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./jsonview.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/jsonview/jsonview.component.html")).default,
-                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./jsonview.component.css */ "./src/app/bulkupload/jsonview/jsonview.component.css")).default]
+                    template: tslib_1.__importDefault(__webpack_require__(/*! raw-loader!./jsonview.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/jsonview/jsonview.component.html")).default,
+                    styles: [tslib_1.__importDefault(__webpack_require__(/*! ./jsonview.component.css */ "./src/app/bulkupload/jsonview/jsonview.component.css")).default]
                 }),
-                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+                tslib_1.__param(1, core_1.Inject(dialog_1.MAT_DIALOG_DATA))
             ], JsonviewComponent);
+            exports.JsonviewComponent = JsonviewComponent;
             /***/ 
         }),
         /***/ "./src/app/bulkupload/upload/upload.component.css": 
@@ -1006,23 +1440,25 @@
         /*!*******************************************************!*\
           !*** ./src/app/bulkupload/upload/upload.component.ts ***!
           \*******************************************************/
-        /*! exports provided: UploadComponent */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UploadComponent", function () { return UploadComponent; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../app.service */ "./src/app/app.service.ts");
-            /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var app_service_1 = __webpack_require__(/*! ./../../app.service */ "./src/app/app.service.ts");
+            var platform_browser_1 = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm2015/platform-browser.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var dialog_1 = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            var validation_service_1 = __webpack_require__(/*! ../validation.service */ "./src/app/bulkupload/validation.service.ts");
             var UploadComponent = /** @class */ (function () {
-                function UploadComponent(sanitizer, appService, dialogRef) {
+                function UploadComponent(sanitizer, appService, dialogRef, validateService, data) {
                     this.sanitizer = sanitizer;
                     this.appService = appService;
                     this.dialogRef = dialogRef;
+                    this.validateService = validateService;
+                    this.data = data;
                     this.files = [];
-                    this.multiple = true;
+                    this.multiple = false;
                     this.accept = 'application/JSON';
                 }
                 UploadComponent.prototype.ngOnInit = function () { };
@@ -1036,7 +1472,6 @@
                     var files = event.dataTransfer
                         ? event.dataTransfer.files
                         : event.target.files;
-                    console.log('event::::::', event);
                     // tslint:disable-next-line: prefer-for-of
                     for (var i = 0; i < files.length; i++) {
                         var file = files[i];
@@ -1086,37 +1521,137 @@
                 };
                 UploadComponent.prototype.uploadFiles = function (filesData) {
                     var _this = this;
-                    this.appService.uploadFileData(filesData).subscribe(function (response) {
-                        console.log(response);
-                        _this.dialogRef.close(response);
-                    }, function (error) { return console.log(error); }, function () { return console.log('completed'); });
+                    var errordata = [];
+                    var _loop_1 = function (fileData) {
+                        this_1.validateService.getFinalErrorMessage(fileData, this_1.data.schemaType).then(function (data) {
+                            errordata = data;
+                            _this.appService.uploadFileData(fileData, errordata).subscribe(function (response) {
+                                console.log(response);
+                                _this.dialogRef.close(response);
+                            }, function (error) { return console.log(error); }, function () { return console.log('completed'); });
+                        }, function (error) {
+                            console.log('error in validating the json files');
+                        });
+                    };
+                    var this_1 = this;
+                    for (var _i = 0, filesData_1 = filesData; _i < filesData_1.length; _i++) {
+                        var fileData = filesData_1[_i];
+                        _loop_1(fileData);
+                    }
                 };
                 return UploadComponent;
             }());
             UploadComponent.ctorParameters = function () { return [
-                { type: _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["DomSanitizer"] },
-                { type: _app_service__WEBPACK_IMPORTED_MODULE_1__["AppService"] },
-                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__["MatDialogRef"] }
+                { type: platform_browser_1.DomSanitizer },
+                { type: app_service_1.AppService },
+                { type: dialog_1.MatDialogRef },
+                { type: validation_service_1.ValidationService },
+                { type: undefined, decorators: [{ type: core_1.Inject, args: [dialog_1.MAT_DIALOG_DATA,] }] }
             ]; };
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"])('fileUpload', { static: false })
+            tslib_1.__decorate([
+                core_1.ViewChild('fileUpload', { static: false })
             ], UploadComponent.prototype, "fileUpload", void 0);
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"])()
+            tslib_1.__decorate([
+                core_1.Input()
             ], UploadComponent.prototype, "files", void 0);
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"])()
+            tslib_1.__decorate([
+                core_1.Input()
             ], UploadComponent.prototype, "multiple", void 0);
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Input"])()
+            tslib_1.__decorate([
+                core_1.Input()
             ], UploadComponent.prototype, "accept", void 0);
-            UploadComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
+            UploadComponent = tslib_1.__decorate([
+                core_1.Component({
                     selector: 'app-upload',
-                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./upload.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/upload/upload.component.html")).default,
-                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./upload.component.css */ "./src/app/bulkupload/upload/upload.component.css")).default]
-                })
+                    template: tslib_1.__importDefault(__webpack_require__(/*! raw-loader!./upload.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/upload/upload.component.html")).default,
+                    styles: [tslib_1.__importDefault(__webpack_require__(/*! ./upload.component.css */ "./src/app/bulkupload/upload/upload.component.css")).default]
+                }),
+                tslib_1.__param(4, core_1.Inject(dialog_1.MAT_DIALOG_DATA))
             ], UploadComponent);
+            exports.UploadComponent = UploadComponent;
+            /***/ 
+        }),
+        /***/ "./src/app/bulkupload/validation.service.ts": 
+        /*!**************************************************!*\
+          !*** ./src/app/bulkupload/validation.service.ts ***!
+          \**************************************************/
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
+            "use strict";
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            __webpack_require__(/*! ajv */ "./node_modules/ajv/lib/ajv.js");
+            var itrschema_service_1 = __webpack_require__(/*! ./itrschema.service */ "./src/app/bulkupload/itrschema.service.ts");
+            var ajv = __webpack_require__(/*! ajv */ "./node_modules/ajv/lib/ajv.js");
+            var Subject_1 = __webpack_require__(/*! rxjs/internal/Subject */ "./node_modules/rxjs/internal/Subject.js");
+            var ValidationService = /** @class */ (function () {
+                function ValidationService(itrSchema) {
+                    this.itrSchema = itrSchema;
+                    this.tempFileNames = [
+                        'dataITR2-2-invalid.json',
+                        'dataITR2-3-invalid.json',
+                        'dataITR2-4-invalid.json',
+                        'dataITR3-2-invalid.json',
+                        'dataITR3-3-invalid.json',
+                        'dataITR3-4-invalid.json'
+                    ];
+                    this.ajvValidation = ajv({ allErrors: true });
+                }
+                ValidationService.prototype.getFinalErrorMessage = function (uploadedFile, schemaType) {
+                    var _this = this;
+                    var reader = new FileReader();
+                    var jsonString = '';
+                    var schemaData = schemaType === 'ITR_SCHEMA_2'
+                        ? this.itrSchema.getITR2Schema()
+                        : this.itrSchema.getITR3Schema();
+                    var errorObj = { errorDescription: '' };
+                    var sub = new Subject_1.Subject();
+                    var tempErrorDataObj = [];
+                    return new Promise(function (resolve, reject) {
+                        if (_this.tempFileNames.indexOf(uploadedFile.name) > -1) {
+                            reader.onloadend = function (e) {
+                                if (typeof reader.result === 'string') {
+                                    jsonString = JSON.parse(reader.result);
+                                }
+                                var t0 = performance.now();
+                                _this.ajvValidation.validate(schemaData, jsonString);
+                                var t1 = performance.now();
+                                console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
+                                var errorData = _this.ajvValidation.errors;
+                                if (errorData) {
+                                    if (errorData && errorData.length > 0) {
+                                        for (var _i = 0, errorData_1 = errorData; _i < errorData_1.length; _i++) {
+                                            var obj = errorData_1[_i];
+                                            errorObj.errorDescription = obj.dataPath + ' , ' + obj.message;
+                                            tempErrorDataObj.push(Object.assign({}, errorObj));
+                                        }
+                                    }
+                                }
+                                resolve(tempErrorDataObj);
+                            };
+                            reader.readAsText(uploadedFile);
+                            // Make sure to handle error states
+                            reader.onerror = function (e) {
+                                reject(e);
+                            };
+                        }
+                        else {
+                            resolve(tempErrorDataObj);
+                        }
+                    });
+                };
+                return ValidationService;
+            }());
+            ValidationService.ctorParameters = function () { return [
+                { type: itrschema_service_1.ItrschemaService }
+            ]; };
+            ValidationService = tslib_1.__decorate([
+                core_1.Injectable({
+                    providedIn: 'root'
+                })
+            ], ValidationService);
+            exports.ValidationService = ValidationService;
             /***/ 
         }),
         /***/ "./src/app/confirm/confirm.component.css": 
@@ -1134,14 +1669,13 @@
         /*!**********************************************!*\
           !*** ./src/app/confirm/confirm.component.ts ***!
           \**********************************************/
-        /*! exports provided: ConfirmComponent */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConfirmComponent", function () { return ConfirmComponent; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var dialog_1 = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
             var ConfirmComponent = /** @class */ (function () {
                 function ConfirmComponent(dialogRef, message) {
                     this.dialogRef = dialogRef;
@@ -1154,33 +1688,33 @@
                 return ConfirmComponent;
             }());
             ConfirmComponent.ctorParameters = function () { return [
-                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
-                { type: String, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
+                { type: dialog_1.MatDialogRef },
+                { type: String, decorators: [{ type: core_1.Inject, args: [dialog_1.MAT_DIALOG_DATA,] }] }
             ]; };
-            ConfirmComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            ConfirmComponent = tslib_1.__decorate([
+                core_1.Component({
                     selector: 'app-confirm',
-                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./confirm.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/confirm/confirm.component.html")).default,
-                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./confirm.component.css */ "./src/app/confirm/confirm.component.css")).default]
+                    template: tslib_1.__importDefault(__webpack_require__(/*! raw-loader!./confirm.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/confirm/confirm.component.html")).default,
+                    styles: [tslib_1.__importDefault(__webpack_require__(/*! ./confirm.component.css */ "./src/app/confirm/confirm.component.css")).default]
                 }),
-                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+                tslib_1.__param(1, core_1.Inject(dialog_1.MAT_DIALOG_DATA))
             ], ConfirmComponent);
+            exports.ConfirmComponent = ConfirmComponent;
             /***/ 
         }),
         /***/ "./src/environments/environment.ts": 
         /*!*****************************************!*\
           !*** ./src/environments/environment.ts ***!
           \*****************************************/
-        /*! exports provided: environment */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function () { return environment; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
             // This file can be replaced during build by using the `fileReplacements` array.
             // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
             // The list of file replacements can be found in `angular.json`.
-            var environment = {
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            exports.environment = {
                 production: false
             };
             /*
@@ -1197,21 +1731,20 @@
         /*!*********************!*\
           !*** ./src/main.ts ***!
           \*********************/
-        /*! no exports provided */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
             "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var hammerjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! hammerjs */ "./node_modules/hammerjs/hammer.js");
-            /* harmony import */ var hammerjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/ __webpack_require__.n(hammerjs__WEBPACK_IMPORTED_MODULE_1__);
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/platform-browser-dynamic */ "./node_modules/@angular/platform-browser-dynamic/fesm2015/platform-browser-dynamic.js");
-            /* harmony import */ var _app_app_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app/app.module */ "./src/app/app.module.ts");
-            /* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./environments/environment */ "./src/environments/environment.ts");
-            if (_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].production) {
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["enableProdMode"])();
+            Object.defineProperty(exports, "__esModule", { value: true });
+            var tslib_1 = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            __webpack_require__(/*! hammerjs */ "./node_modules/hammerjs/hammer.js");
+            var core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var platform_browser_dynamic_1 = __webpack_require__(/*! @angular/platform-browser-dynamic */ "./node_modules/@angular/platform-browser-dynamic/fesm2015/platform-browser-dynamic.js");
+            var app_module_1 = __webpack_require__(/*! ./app/app.module */ "./src/app/app.module.ts");
+            var environment_1 = __webpack_require__(/*! ./environments/environment */ "./src/environments/environment.ts");
+            if (environment_1.environment.production) {
+                core_1.enableProdMode();
             }
-            Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_3__["platformBrowserDynamic"])().bootstrapModule(_app_app_module__WEBPACK_IMPORTED_MODULE_4__["AppModule"])
+            platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule)
                 .catch(function (err) { return console.error(err); });
             /***/ 
         }),

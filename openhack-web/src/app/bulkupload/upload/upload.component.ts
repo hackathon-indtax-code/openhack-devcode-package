@@ -42,7 +42,6 @@ export class UploadComponent implements OnInit {
     const files = event.dataTransfer
       ? event.dataTransfer.files
       : event.target.files;
-    console.log('event::::::', event);
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
