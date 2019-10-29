@@ -37,7 +37,12 @@ export class ValidationService {
           if (typeof reader.result === 'string') {
             jsonString = JSON.parse(reader.result);
           }
+          let t0 = performance.now();
           this.ajvValidation.validate(schemaData, jsonString);
+          let t1 = performance.now();
+          console.log(
+            'Call to doSomething took ' + (t1 - t0) + ' milliseconds.'
+          );
           const errorData: any = this.ajvValidation.errors;
           if (errorData) {
             if (errorData && errorData.length > 0) {
