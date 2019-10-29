@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.coyote.ErrorState;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.openhack.dev.configuration.FileUploadKafkaConfiguration;
-import com.openhack.dev.constant.FileConstants;
+import com.google.gson.Gson;
 import com.openhack.dev.domain.ErrorData;
+import com.openhack.dev.domain.Errors;
 import com.openhack.dev.domain.FileMetadata;
 import com.openhack.dev.enums.ErrorStatus;
 import com.openhack.dev.enums.ValidateStatus;
@@ -29,8 +28,8 @@ public class FileUploadService {
 
 	@Autowired
 	FileUploadRepository fileUploadRepository;
-	@Autowired
-	FileUploadKafkaConfiguration uploadKafkaConfiguration;
+	// @Autowired
+	// FileUploadKafkaConfiguration uploadKafkaConfiguration;
 
 	public FileMetadata saveFileMetadata(FileMetadata fileMetadata) {
 
@@ -60,7 +59,7 @@ public class FileUploadService {
 		return fileMetadataList;
 	}
 
-	public List<FileMetadata> saveMultiFileData(MultipartFile[] files) {
+	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList) {
 
 		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
 		for (MultipartFile file : files) {
@@ -76,14 +75,25 @@ public class FileUploadService {
 			fileMetadata.setJsonData(jsonFielData);
 			ValidateStatus validateStatus = ValidateStatus.SUBMITTED;
 			fileMetadata.setValidateStatus(validateStatus);
-			/* Test Error List */
 			List<ErrorData> list = new ArrayList<ErrorData>();
-			ErrorData errorData = new ErrorData();
-			ErrorStatus errorState = ErrorStatus.SCHEMA_ERROR;
-			errorData.setErrorType(errorState);
-			errorData.setErrorDescription("First Name length is not valid");
-			list.add(errorData);
-			fileMetadata.setErrorDataList(list);
+			// convert String errorList to Errors object
+			Gson gson = new Gson();
+			Errors[] errorsList = gson.fromJson(errorList, Errors[].class);
+			/* Test Error List */
+			if (errorsList.length > 0) {
+				ValidateStatus validateStatusError = ValidateStatus.ERROR;
+				fileMetadata.setValidateStatus(validateStatusError);
+				for (Errors errors : errorsList) {
+					ErrorData errorData = new ErrorData();
+					ErrorStatus errorState = ErrorStatus.SCHEMA_ERROR;
+					errorData.setErrorType(errorState);
+					errorData.setErrorDescription(errors.getErrorDescription());
+					list.add(errorData);
+				}
+
+				fileMetadata.setErrorDataList(list);
+			}
+
 			fileMetadataList.add(fileMetadata);
 			saveFileMetadata(fileMetadata);
 			initiateKafkaMessage(fileMetadata.getId());
@@ -115,7 +125,7 @@ public class FileUploadService {
 
 	public void initiateKafkaMessage(String validateKey) {
 
-		uploadKafkaConfiguration.sendMessage(validateKey);
+		// uploadKafkaConfiguration.sendMessage(validateKey);
 	}
 
 	public List<FileMetadata> getAllFileValidateData() {

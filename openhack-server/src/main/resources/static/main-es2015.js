@@ -45,7 +45,46 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div\n  class=\"container\"\n  fxLayout=\"row\"\n  fxLayoutAlign=\"space-around center\"\n  style=\"padding:10px;\"\n>\n  <button\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"openUploadDialog()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>add</mat-icon>\n    Choose Files\n  </button>\n\n  <button [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"getValidatedFilesData('REFRESH')\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>refresh</mat-icon>\n    Refresh All\n  </button>\n\n  <button [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"deleteAllValidateFielData()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>delete</mat-icon>\n    Delete All\n  </button>\n</div>\n\n<div\n  class=\"container mat-elevation-z8\"\n  fxLayout=\"column\"\n style=\"margin-left: 10px;margin-right: 10px;\"\n>\n  <table mat-table matSort [dataSource]=\"dataSource\">\n    <!--- Note that these columns can be defined in any order.\n        The actual rendered columns are set as a property on the row definition\" -->\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n      <th mat-header-cell *matHeaderCellDef>No.</th>\n      <td mat-cell *matCellDef=\"let element; let i = index\">{{ i + 1 }}</td>\n    </ng-container>\n\n    <!-- File Name -->\n    <ng-container matColumnDef=\"fileName\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>\n      <td mat-cell *matCellDef=\"let element\">{{ element.fileName }}</td>\n    </ng-container>\n\n    <!-- Validation Status Column -->\n    <ng-container matColumnDef=\"validateStatus\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Validation Status\n      </th>\n      <td mat-cell *matCellDef=\"let element\">{{ element.validateStatus }}</td>\n    </ng-container>\n\n        <!-- Created Date Column -->\n    <ng-container matColumnDef=\"createdDate\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Created Date\n      </th>\n      <td mat-cell *matCellDef=\"let element\">{{ element.createdDate | date:'short' }}</td>\n    </ng-container>\n\n\n    <ng-container matColumnDef=\"update\">\n      <th mat-header-cell *matHeaderCellDef>Refresh</th>\n      <td mat-cell *matCellDef=\"let element\">\n      <button mat-icon-button color=\"primary\" (click)=\"getUpdateDataById(element)\">\n          <i class=\"material-icons\">\n            refresh\n          </i>\n        </button>\n      </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"delete\">\n      <th mat-header-cell *matHeaderCellDef>Delete</th>\n      <td mat-cell *matCellDef=\"let element\">\n        <button\n          mat-icon-button\n          color=\"primary\"\n          (click)=\"deleteValidateFileData(element)\"\n        >\n          <mat-icon class=\"mat-18\">delete</mat-icon>\n        </button>\n      </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns\"></tr>\n  </table>\n\n  <mat-paginator\n    [pageSizeOptions]=\"[5, 10, 20]\"\n    showFirstLastButtons\n  ></mat-paginator>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div\n  class=\"container\"\n  fxLayout=\"row\"\n  fxLayoutAlign=\"space-around center\"\n  style=\"padding:10px;\"\n>\n  <button\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"openUploadDialog()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>add</mat-icon>\n    Choose Files\n  </button>\n\n  <button\n    [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"getValidatedFilesData('REFRESH')\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>refresh</mat-icon>\n    Refresh All\n  </button>\n\n  <button\n    [disabled]=\"dataSource.data.length === 0\"\n    mat-raised-button\n    color=\"primary\"\n    (click)=\"deleteAllValidateFielData()\"\n    class=\"buttonPosition\"\n  >\n    <mat-icon>delete</mat-icon>\n    Delete All\n  </button>\n</div>\n\n<div\n  class=\"container mat-elevation-z8\"\n  fxLayout=\"column\"\n  style=\"margin-left: 10px;margin-right: 10px;\"\n>\n  <table mat-table matSort [dataSource]=\"dataSource\">\n    <!--- Note that these columns can be defined in any order.\n        The actual rendered columns are set as a property on the row definition\" -->\n\n    <!-- Position Column -->\n    <ng-container matColumnDef=\"position\">\n      <th mat-header-cell *matHeaderCellDef>No.</th>\n      <td mat-cell *matCellDef=\"let element; let i = index\">{{ i + 1 }}</td>\n    </ng-container>\n\n    <!-- File Name -->\n    <ng-container matColumnDef=\"fileName\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>File Name</th>\n      <td\n        mat-cell\n        (click)=\"showJsonViewer(element)\"\n        class=\"textDecor\"\n        *matCellDef=\"let element\"\n      >\n        {{ element.fileName }}\n      </td>\n    </ng-container>\n\n    <!-- Validation Status Column -->\n    <ng-container matColumnDef=\"validateStatus\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Validation Status\n      </th>\n      <td mat-cell *matCellDef=\"let element\">\n        <span *ngIf=\"showStatusIcon(element, 'SUBMITTED')\"\n          ><button mat-icon-button>\n            <i\n              class=\"material-icons statusIcon\"\n              matTooltip=\"File is SUBMITTED for validation.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              av_timer\n            </i>\n          </button></span\n        >\n        <span *ngIf=\"showStatusIcon(element, 'SUCCESS')\"\n          ><button mat-icon-button class=\"green-icon\">\n            <i\n              class=\"material-icons statusIcon\"\n              color=\"green\"\n              matTooltip=\"File validation is SUCCESS.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              done\n            </i>\n          </button></span\n        >\n        <span *ngIf=\"showStatusIcon(element, 'ERROR')\"\n          ><button\n            mat-icon-button\n            color=\"warn\"\n            (click)=\"getErrorDetails(element)\"\n          >\n            <i\n              class=\"material-icons statusIcon\"\n              matTooltip=\"File validation falied.Click to view the failed items.\"\n              [matTooltipPosition]=\"positionOptions[2]\"\n            >\n              warning\n            </i>\n          </button></span\n        >\n        <span>{{ element.validateStatus }}</span>\n      </td>\n    </ng-container>\n\n    <!-- Created Date Column -->\n    <ng-container matColumnDef=\"createdDate\">\n      <th mat-header-cell *matHeaderCellDef mat-sort-header>\n        Created Date\n      </th>\n      <td mat-cell *matCellDef=\"let element\">\n        {{ element.createdDate | date: 'short' }}\n      </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"update\">\n      <th mat-header-cell *matHeaderCellDef>Refresh</th>\n      <td mat-cell *matCellDef=\"let element\">\n        <button\n          mat-icon-button\n          color=\"primary\"\n          (click)=\"getUpdateDataById(element)\"\n        >\n          <i class=\"material-icons\">\n            refresh\n          </i>\n        </button>\n      </td>\n    </ng-container>\n\n    <ng-container matColumnDef=\"delete\">\n      <th mat-header-cell *matHeaderCellDef>Delete</th>\n      <td mat-cell *matCellDef=\"let element\">\n        <button\n          mat-icon-button\n          color=\"primary\"\n          (click)=\"deleteValidateFileData(element)\"\n        >\n          <mat-icon class=\"mat-18\">delete</mat-icon>\n        </button>\n      </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns\"></tr>\n  </table>\n\n  <mat-paginator\n    [pageSizeOptions]=\"[5, 10, 20]\"\n    showFirstLastButtons\n  ></mat-paginator>\n</div>\n");
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errorbar/errorbar.component.html":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errorbar/errorbar.component.html ***!
+  \***************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div>\n  <button mat-icon-button color=\"warn\">\n    <i class=\"material-icons\">\n      warning\n    </i>\n  </button>\n</div>\n<p>\n  <span style=\"color: white;\"\n    >Unexpected error occured while viewing JSON. Please wait for the validation\n    to complete.</span\n  >\n</p>\n");
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errordata/errordata.component.html":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errordata/errordata.component.html ***!
+  \*****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>File Validator Error Data</h1>\n<div mat-dialog-content>\n  <table mat-table matSort [dataSource]=\"dataSource\">\n    <!--- Note that these columns can be defined in any order.\n        The actual rendered columns are set as a property on the row definition\" -->\n\n    <!-- Sl Column -->\n    <ng-container matColumnDef=\"position\">\n      <th mat-header-cell *matHeaderCellDef>No.</th>\n      <td mat-cell *matCellDef=\"let element; let i = index\">{{ i + 1 }}</td>\n    </ng-container>\n\n    <!-- Error Type -->\n    <ng-container matColumnDef=\"errorType\">\n      <th mat-header-cell *matHeaderCellDef>Error Type</th>\n      <td mat-cell *matCellDef=\"let element\">{{ element.errorType }}</td>\n    </ng-container>\n\n    <!-- Error Description -->\n    <ng-container matColumnDef=\"errorDescription\">\n      <th mat-header-cell *matHeaderCellDef>Error Description</th>\n      <td mat-cell *matCellDef=\"let element\">\n        {{ element.errorDescription }}\n      </td>\n    </ng-container>\n\n    <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n    <tr mat-row *matRowDef=\"let row; columns: displayedColumns\"></tr>\n  </table>\n\n  <mat-paginator\n    [pageSizeOptions]=\"[5, 10, 20]\"\n    showFirstLastButtons\n  ></mat-paginator>\n</div>\n\n<div mat-dialog-actions align=\"end\">\n  <button mat-button [mat-dialog-close]=\"true\" cdkFocusInitial>Close</button>\n</div>\n");
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/jsonview/jsonview.component.html":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/jsonview/jsonview.component.html ***!
+  \***************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>Json Viewer</h1>\n<div mat-dialog-content>\n  <json-editor #editor [options]=\"editorOptions\" [data]=\"jsonData\"></json-editor>\n</div>\n<div mat-dialog-actions>\n  <button mat-button [mat-dialog-close]=\"true\" cdkFocusInitial>Close</button>\n</div>\n");
 
 /***/ }),
 
@@ -421,6 +460,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm2015/material.js");
 /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
 /* harmony import */ var _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./confirm/confirm.component */ "./src/app/confirm/confirm.component.ts");
+/* harmony import */ var _bulkupload_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./bulkupload/jsonview/jsonview.component */ "./src/app/bulkupload/jsonview/jsonview.component.ts");
+/* harmony import */ var ang_jsoneditor__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ang-jsoneditor */ "./node_modules/ang-jsoneditor/fesm2015/ang-jsoneditor.js");
+/* harmony import */ var _bulkupload_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./bulkupload/errorbar/errorbar.component */ "./src/app/bulkupload/errorbar/errorbar.component.ts");
+/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/material/tooltip */ "./node_modules/@angular/material/esm2015/tooltip.js");
+/* harmony import */ var _bulkupload_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./bulkupload/errordata/errordata.component */ "./src/app/bulkupload/errordata/errordata.component.ts");
+
+
+
+
+
 
 
 
@@ -450,7 +499,15 @@ let AppModule = class AppModule {
 };
 AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
-        declarations: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"], _bulkupload_bulkupload_component__WEBPACK_IMPORTED_MODULE_11__["BulkuploadComponent"], _bulkupload_upload_upload_component__WEBPACK_IMPORTED_MODULE_18__["UploadComponent"], _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__["ConfirmComponent"]],
+        declarations: [
+            _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
+            _bulkupload_bulkupload_component__WEBPACK_IMPORTED_MODULE_11__["BulkuploadComponent"],
+            _bulkupload_upload_upload_component__WEBPACK_IMPORTED_MODULE_18__["UploadComponent"],
+            _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__["ConfirmComponent"],
+            _bulkupload_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_24__["JsonviewComponent"],
+            _bulkupload_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_26__["ErrorbarComponent"],
+            _bulkupload_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_28__["ErrordataComponent"]
+        ],
         imports: [
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"],
@@ -465,13 +522,27 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClientModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_7__["FormsModule"],
             _angular_flex_layout__WEBPACK_IMPORTED_MODULE_16__["FlexLayoutModule"],
-            _angular_material_table__WEBPACK_IMPORTED_MODULE_17__["MatTableModule"], _angular_material_sort__WEBPACK_IMPORTED_MODULE_19__["MatSortModule"], _angular_material_paginator__WEBPACK_IMPORTED_MODULE_20__["MatPaginatorModule"], _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_22__["MatSnackBarModule"]
+            _angular_material_table__WEBPACK_IMPORTED_MODULE_17__["MatTableModule"],
+            _angular_material_sort__WEBPACK_IMPORTED_MODULE_19__["MatSortModule"],
+            _angular_material_paginator__WEBPACK_IMPORTED_MODULE_20__["MatPaginatorModule"],
+            _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_22__["MatSnackBarModule"],
+            ang_jsoneditor__WEBPACK_IMPORTED_MODULE_25__["NgJsonEditorModule"],
+            _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_27__["MatTooltipModule"]
         ],
-        providers: [{ provide: _angular_material__WEBPACK_IMPORTED_MODULE_21__["MAT_DIALOG_DEFAULT_OPTIONS"], useValue: { panelClass: 'mat-dialog-override' } }],
+        providers: [
+            {
+                provide: _angular_material__WEBPACK_IMPORTED_MODULE_21__["MAT_DIALOG_DEFAULT_OPTIONS"],
+                useValue: { panelClass: 'mat-dialog-override' }
+            }
+        ],
         schemas: [_angular_core__WEBPACK_IMPORTED_MODULE_2__["CUSTOM_ELEMENTS_SCHEMA"]],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]],
         entryComponents: [
-            _bulkupload_upload_upload_component__WEBPACK_IMPORTED_MODULE_18__["UploadComponent"], _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__["ConfirmComponent"]
+            _bulkupload_upload_upload_component__WEBPACK_IMPORTED_MODULE_18__["UploadComponent"],
+            _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_23__["ConfirmComponent"],
+            _bulkupload_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_24__["JsonviewComponent"],
+            _bulkupload_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_26__["ErrorbarComponent"],
+            _bulkupload_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_28__["ErrordataComponent"]
         ]
     })
 ], AppModule);
@@ -559,15 +630,21 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BulkuploadComponent", function() { return BulkuploadComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../confirm/confirm.component */ "./src/app/confirm/confirm.component.ts");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../app.service */ "./src/app/app.service.ts");
-/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-/* harmony import */ var _upload_upload_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./upload/upload.component */ "./src/app/bulkupload/upload/upload.component.ts");
-/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _errordata_errordata_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./errordata/errordata.component */ "./src/app/bulkupload/errordata/errordata.component.ts");
+/* harmony import */ var _confirm_confirm_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../confirm/confirm.component */ "./src/app/confirm/confirm.component.ts");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../app.service */ "./src/app/app.service.ts");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+/* harmony import */ var _upload_upload_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./upload/upload.component */ "./src/app/bulkupload/upload/upload.component.ts");
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./jsonview/jsonview.component */ "./src/app/bulkupload/jsonview/jsonview.component.ts");
+/* harmony import */ var _errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./errorbar/errorbar.component */ "./src/app/bulkupload/errorbar/errorbar.component.ts");
+
+
+
 
 
 
@@ -593,7 +670,15 @@ let BulkuploadComponent = class BulkuploadComponent {
             'update',
             'delete'
         ];
-        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_7__["MatTableDataSource"]();
+        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_8__["MatTableDataSource"]();
+        this.positionOptions = [
+            'after',
+            'before',
+            'above',
+            'below',
+            'left',
+            'right'
+        ];
     }
     ngOnInit() {
         this.getValidatedFilesData('INIT');
@@ -613,7 +698,7 @@ let BulkuploadComponent = class BulkuploadComponent {
             this.dataSource.paginator = this.paginator;
             if (type === 'REFRESH') {
                 this.snackBar.open(this.dataSource.data.length + ' files data is refreshed.', 'Close', {
-                    duration: 2000,
+                    duration: 2000
                 });
             }
             console.log('Data : ' + response.toString);
@@ -622,13 +707,11 @@ let BulkuploadComponent = class BulkuploadComponent {
         });
     }
     openUploadDialog() {
-        const dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__["MatDialogConfig"]();
+        const dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogConfig"]();
         dialogConfig.disableClose = true;
         dialogConfig.autoFocus = true;
-        dialogConfig.minHeight = '500px';
-        dialogConfig.minWidth = '500px';
         dialogConfig.panelClass = 'mat-dialog-override';
-        const dialogRef = this.dialog.open(_upload_upload_component__WEBPACK_IMPORTED_MODULE_5__["UploadComponent"], dialogConfig);
+        const dialogRef = this.dialog.open(_upload_upload_component__WEBPACK_IMPORTED_MODULE_6__["UploadComponent"], dialogConfig);
         dialogRef.afterClosed().subscribe(data => {
             console.log('Dialog output:', data);
             if (data && data.length > 0) {
@@ -637,7 +720,7 @@ let BulkuploadComponent = class BulkuploadComponent {
                 }
                 this.dataSource.data = [...this.dataSource.data];
                 this.snackBar.open(data.length + ' files uploaded.', 'Close', {
-                    duration: 2000,
+                    duration: 2000
                 });
             }
         });
@@ -651,7 +734,7 @@ let BulkuploadComponent = class BulkuploadComponent {
                 this.dataSource.data[this.getIndexfromdataSource(validateId)].validateStatus = responseData.validateStatus;
                 this.dataSource.data = [...this.dataSource.data];
                 this.snackBar.open(currentElement.fileName + ' data refreshed.', 'Close', {
-                    duration: 2000,
+                    duration: 2000
                 });
             }
             console.log('Id data' + data);
@@ -663,7 +746,7 @@ let BulkuploadComponent = class BulkuploadComponent {
             tempList = this.dataSource.data.splice(this.getIndexfromdataSource(validateFileObj.id), 1);
             this.dataSource.data = [...this.dataSource.data];
             this.snackBar.open(validateFileObj.fileName + ' is deleted.', 'Close', {
-                duration: 2000,
+                duration: 2000
             });
             console.log(response);
         }, error => console.log(error), () => {
@@ -671,7 +754,7 @@ let BulkuploadComponent = class BulkuploadComponent {
         });
     }
     deleteAllValidateFielData() {
-        const dialogRef = this.dialog.open(_confirm_confirm_component__WEBPACK_IMPORTED_MODULE_1__["ConfirmComponent"], {
+        const dialogRef = this.dialog.open(_confirm_confirm_component__WEBPACK_IMPORTED_MODULE_2__["ConfirmComponent"], {
             width: '350px',
             data: 'Do you confirm the deletion?'
         });
@@ -683,7 +766,7 @@ let BulkuploadComponent = class BulkuploadComponent {
                     const dataSourceLength = this.dataSource.data.length;
                     this.dataSource.data = [];
                     this.snackBar.open(dataSourceLength + ' items deleted.', 'Close', {
-                        duration: 2000,
+                        duration: 2000
                     });
                 }, error => console.log('error in data deletion'));
             }
@@ -699,26 +782,242 @@ let BulkuploadComponent = class BulkuploadComponent {
     refresh() {
         this.changeDetectorRefs.detectChanges();
     }
+    showJsonViewer(currentElement) {
+        const dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogConfig"]();
+        dialogConfig.disableClose = true;
+        dialogConfig.autoFocus = true;
+        dialogConfig.panelClass = 'mat-dialog-override';
+        try {
+            dialogConfig.data = { jsonData: JSON.parse(currentElement.jsonData) };
+        }
+        catch (error) {
+            this.snackBar.openFromComponent(_errorbar_errorbar_component__WEBPACK_IMPORTED_MODULE_12__["ErrorbarComponent"], {
+                duration: 5000
+            });
+            return;
+        }
+        const dialogRef = this.dialog.open(_jsonview_jsonview_component__WEBPACK_IMPORTED_MODULE_11__["JsonviewComponent"], dialogConfig);
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+    getErrorDetails(currentElement) {
+        const dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogConfig"]();
+        dialogConfig.disableClose = false;
+        dialogConfig.autoFocus = true;
+        dialogConfig.minHeight = '500px';
+        dialogConfig.minWidth = '500px';
+        dialogConfig.data = {
+            errorDataList: currentElement.errorDataList
+        };
+        const dialogRef = this.dialog.open(_errordata_errordata_component__WEBPACK_IMPORTED_MODULE_1__["ErrordataComponent"], dialogConfig);
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
+    }
+    showStatusIcon(currentElement, validStatus) {
+        let isValidStatus = false;
+        if (currentElement.validateStatus === validStatus) {
+            isValidStatus = true;
+        }
+        return isValidStatus;
+    }
 };
 BulkuploadComponent.ctorParameters = () => [
-    { type: _app_service__WEBPACK_IMPORTED_MODULE_3__["AppService"] },
-    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__["MatDialog"] },
-    { type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["ChangeDetectorRef"] },
-    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_9__["MatSnackBar"] }
+    { type: _app_service__WEBPACK_IMPORTED_MODULE_4__["AppService"] },
+    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialog"] },
+    { type: _angular_core__WEBPACK_IMPORTED_MODULE_3__["ChangeDetectorRef"] },
+    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_10__["MatSnackBar"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_6__["MatSort"], { static: true })
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_7__["MatSort"], { static: true })
 ], BulkuploadComponent.prototype, "sort", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_8__["MatPaginator"], { static: true })
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_9__["MatPaginator"], { static: true })
 ], BulkuploadComponent.prototype, "paginator", void 0);
 BulkuploadComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["Component"])({
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Component"])({
         selector: 'app-bulkupload',
         template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./bulkupload.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/bulkupload.component.html")).default,
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./bulkupload.component.css */ "./src/app/bulkupload/bulkupload.component.css")).default]
     })
 ], BulkuploadComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/bulkupload/errorbar/errorbar.component.css":
+/*!************************************************************!*\
+  !*** ./src/app/bulkupload/errorbar/errorbar.component.css ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2J1bGt1cGxvYWQvZXJyb3JiYXIvZXJyb3JiYXIuY29tcG9uZW50LmNzcyJ9 */");
+
+/***/ }),
+
+/***/ "./src/app/bulkupload/errorbar/errorbar.component.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/bulkupload/errorbar/errorbar.component.ts ***!
+  \***********************************************************/
+/*! exports provided: ErrorbarComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrorbarComponent", function() { return ErrorbarComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+let ErrorbarComponent = class ErrorbarComponent {
+    constructor() { }
+    ngOnInit() { }
+};
+ErrorbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-errorbar',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./errorbar.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errorbar/errorbar.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./errorbar.component.css */ "./src/app/bulkupload/errorbar/errorbar.component.css")).default]
+    })
+], ErrorbarComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/bulkupload/errordata/errordata.component.css":
+/*!**************************************************************!*\
+  !*** ./src/app/bulkupload/errordata/errordata.component.css ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2J1bGt1cGxvYWQvZXJyb3JkYXRhL2Vycm9yZGF0YS5jb21wb25lbnQuY3NzIn0= */");
+
+/***/ }),
+
+/***/ "./src/app/bulkupload/errordata/errordata.component.ts":
+/*!*************************************************************!*\
+  !*** ./src/app/bulkupload/errordata/errordata.component.ts ***!
+  \*************************************************************/
+/*! exports provided: ErrordataComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrordataComponent", function() { return ErrordataComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+
+
+
+
+
+
+let ErrordataComponent = class ErrordataComponent {
+    constructor(dialogRef, data) {
+        this.dialogRef = dialogRef;
+        this.data = data;
+        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_4__["MatTableDataSource"]();
+        this.displayedColumns = ['position', 'errorType', 'errorDescription'];
+    }
+    ngOnInit() {
+        this.dataSource.data = this.data.errorDataList;
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+    }
+};
+ErrordataComponent.ctorParameters = () => [
+    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MatDialogRef"] },
+    { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MAT_DIALOG_DATA"],] }] }
+];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_3__["MatSort"], { static: true })
+], ErrordataComponent.prototype, "sort", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
+], ErrordataComponent.prototype, "paginator", void 0);
+ErrordataComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-errordata',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./errordata.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/errordata/errordata.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./errordata.component.css */ "./src/app/bulkupload/errordata/errordata.component.css")).default]
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_5__["MAT_DIALOG_DATA"]))
+], ErrordataComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/bulkupload/jsonview/jsonview.component.css":
+/*!************************************************************!*\
+  !*** ./src/app/bulkupload/jsonview/jsonview.component.css ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2J1bGt1cGxvYWQvanNvbnZpZXcvanNvbnZpZXcuY29tcG9uZW50LmNzcyJ9 */");
+
+/***/ }),
+
+/***/ "./src/app/bulkupload/jsonview/jsonview.component.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/bulkupload/jsonview/jsonview.component.ts ***!
+  \***********************************************************/
+/*! exports provided: JsonviewComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JsonviewComponent", function() { return JsonviewComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+/* harmony import */ var ang_jsoneditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ang-jsoneditor */ "./node_modules/ang-jsoneditor/fesm2015/ang-jsoneditor.js");
+
+
+
+
+let JsonviewComponent = class JsonviewComponent {
+    constructor(dialogRef, data) {
+        this.dialogRef = dialogRef;
+        this.data = data;
+        this.editorOptions = new ang_jsoneditor__WEBPACK_IMPORTED_MODULE_3__["JsonEditorOptions"]();
+        this.editorOptions.mode = 'tree'; // set all allowed modes
+        this.editorOptions.expandAll = true;
+        this.jsonData = this.data.jsonData;
+    }
+    ngOnInit() { }
+};
+JsonviewComponent.ctorParameters = () => [
+    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
+    { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
+];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(ang_jsoneditor__WEBPACK_IMPORTED_MODULE_3__["JsonEditorComponent"], { static: true })
+], JsonviewComponent.prototype, "editor", void 0);
+JsonviewComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-jsonview',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./jsonview.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/bulkupload/jsonview/jsonview.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./jsonview.component.css */ "./src/app/bulkupload/jsonview/jsonview.component.css")).default]
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+], JsonviewComponent);
 
 
 
@@ -804,6 +1103,7 @@ let UploadComponent = class UploadComponent {
         }
     }
     removeSelectedFiles() {
+        this.fileUpload.nativeElement.value = '';
         this.files = [];
     }
     clearInputElement() {

@@ -28,6 +28,7 @@ import { NgJsonEditorModule } from 'ang-jsoneditor';
 import { ErrorbarComponent } from './bulkupload/errorbar/errorbar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ErrordataComponent } from './bulkupload/errordata/errordata.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { ErrordataComponent } from './bulkupload/errordata/errordata.component';
     MatPaginatorModule,
     MatSnackBarModule,
     NgJsonEditorModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ],
   providers: [
     {

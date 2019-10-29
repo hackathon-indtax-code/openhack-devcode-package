@@ -39,6 +39,12 @@ export class BulkuploadComponent implements OnInit {
     'left',
     'right'
   ];
+  itrSchemaType: any = [
+    { value: 'ITR_SCHEMA_2', viewValue: 'ITR2 Schema' },
+    { value: 'ITR_SCHEMA_3', viewValue: 'ITR3 Schema' }
+  ];
+
+  schemaModalValue: any;
 
   constructor(
     private appService: AppService,
@@ -84,12 +90,19 @@ export class BulkuploadComponent implements OnInit {
     );
   }
 
+  onSchemaChnage(selectedType) {
+    console.log('selectedType : ' + selectedType);
+  }
+
   openUploadDialog() {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.minHeight = '200px';
+    dialogConfig.minWidth = '500px';
     dialogConfig.panelClass = 'mat-dialog-override';
+    dialogConfig.data = {schemaType : this.schemaModalValue };
     const dialogRef = this.dialog.open(UploadComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(data => {
@@ -215,7 +228,7 @@ export class BulkuploadComponent implements OnInit {
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
     dialogConfig.minHeight = '500px';
-    dialogConfig.minWidth = '500px';
+    dialogConfig.minWidth = '800px';
 
     dialogConfig.data = {
       errorDataList: currentElement.errorDataList

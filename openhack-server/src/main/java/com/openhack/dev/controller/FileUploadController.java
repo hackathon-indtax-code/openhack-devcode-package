@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.openhack.dev.domain.Errors;
 import com.openhack.dev.domain.FileMetadata;
 import com.openhack.dev.service.FileUploadService;
 
@@ -28,22 +29,24 @@ public class FileUploadController {
 	@Autowired
 	FileUploadService fileUploadService;
 
-
 	private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
 	@PostMapping("/uploadFile")
-	public ResponseEntity<List<FileMetadata>> uploadFile(@RequestParam("file") MultipartFile file) {
-
+	public ResponseEntity<List<FileMetadata>> uploadFile(@RequestParam("file") MultipartFile file,
+			@RequestParam("errors") String errors) {
+		System.out.println(" MultipartFile   :");
 		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
 		fileMetadataList = fileUploadService.saveSingleFileData(file);
 		return new ResponseEntity<List<FileMetadata>>(fileMetadataList, HttpStatus.OK);
 	}
 
 	@PostMapping("/uploadMultipleFiles")
-	public ResponseEntity<List<FileMetadata>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+	public ResponseEntity<List<FileMetadata>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,
+			@RequestParam("errors") String errors) {
 
+		System.out.println(" MultipartFile []  :");
 		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
-		fileMetadataList = fileUploadService.saveMultiFileData(files);
+		 fileMetadataList = fileUploadService.saveMultiFileData(files, errors);
 		return new ResponseEntity<List<FileMetadata>>(fileMetadataList, HttpStatus.OK);
 	}
 

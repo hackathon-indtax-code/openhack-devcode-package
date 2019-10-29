@@ -4,7 +4,20 @@
   fxLayoutAlign="space-around center"
   style="padding:10px;"
 >
-  <button
+  <mat-form-field>
+    <mat-label>Schema Type</mat-label>
+    <mat-select [(ngModel)]="schemaModalValue" (selectionChange)="onSchemaChnage($event.value)">
+      <mat-option
+        *ngFor="let schema of itrSchemaType"
+        [required]="true"
+        [(value)]="schema.value"
+      >
+        {{ schema.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button [disabled]="!schemaModalValue"
     mat-raised-button
     color="primary"
     (click)="openUploadDialog()"

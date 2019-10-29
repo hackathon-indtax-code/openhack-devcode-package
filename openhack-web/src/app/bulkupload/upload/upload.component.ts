@@ -1,7 +1,8 @@
 import { AppService } from './../../app.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild, Input, ElementRef, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ValidationService } from '../validation.service';
 
 @Component({
   selector: 'app-upload',
@@ -14,7 +15,7 @@ export class UploadComponent implements OnInit {
   @Input()
   files: File[] = [];
   @Input()
-  multiple = true;
+  multiple = false;
   @Input()
   accept = 'application/JSON';
   inputFileName: string;
@@ -22,7 +23,9 @@ export class UploadComponent implements OnInit {
   constructor(
     private sanitizer: DomSanitizer,
     private appService: AppService,
-    public dialogRef: MatDialogRef<UploadComponent>
+    public dialogRef: MatDialogRef<UploadComponent>,
+    private validateService: ValidationService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit() {}
@@ -98,13 +101,24 @@ export class UploadComponent implements OnInit {
   }
 
   uploadFiles(filesData) {
-    this.appService.uploadFileData(filesData).subscribe(
-      response => {
-        console.log(response);
-        this.dialogRef.close(response);
-      },
-      error => console.log(error),
-      () => console.log('completed')
-    );
+    let errordata: any = [];
+    for (const fileData of filesData) {
+      this.validateService.getFinalErrorMessage(fileData , this.data.schemaType).then(
+        data => {
+          errordata = data;
+          this.appService.uploadFileData(fileData, errordata).subscribe(
+            response => {
+              console.log(response);
+              this.dialogRef.close(response);
+            },
+            error => console.log(error),
+            () => console.log('completed')
+          );
+        },
+        error => {
+          console.log('error in validating the json files');
+        }
+      );
+    }
   }
 }

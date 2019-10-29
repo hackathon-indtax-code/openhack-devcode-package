@@ -54,20 +54,6 @@ th.mat-sort-header-sorted {
   color: black;
 }
 
-.mat-dialog-override {
-  mat-dialog-container {
-    > :first-child {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-    mat-dialog-content,
-    div[mat-dialog-content] {
-      flex-grow: 1;
-    }
-  }
-}
-
 .mat-column-fileName:hover {
   text-decoration: underline !important;
   cursor: pointer !important;
@@ -81,3 +67,4 @@ th.mat-sort-header-sorted {
 .green-icon {
   color: green;
 }
+
