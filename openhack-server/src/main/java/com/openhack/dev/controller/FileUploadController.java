@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.openhack.dev.domain.Errors;
 import com.openhack.dev.domain.FileMetadata;
 import com.openhack.dev.service.FileUploadService;
 
@@ -34,34 +33,34 @@ public class FileUploadController {
 	@PostMapping("/uploadFile")
 	public ResponseEntity<List<FileMetadata>> uploadFile(@RequestParam("file") MultipartFile file,
 			@RequestParam("errors") String errors) {
-		System.out.println(" MultipartFile   :");
-		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
+		logger.info(" MultipartFile   :");
+		List<FileMetadata> fileMetadataList = null;
 		fileMetadataList = fileUploadService.saveSingleFileData(file);
-		return new ResponseEntity<List<FileMetadata>>(fileMetadataList, HttpStatus.OK);
+		return new ResponseEntity<>(fileMetadataList, HttpStatus.OK);
 	}
 
 	@PostMapping("/uploadMultipleFiles")
 	public ResponseEntity<List<FileMetadata>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,
 			@RequestParam("errors") String errors) {
 
-		System.out.println(" MultipartFile []  :");
-		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
-		 fileMetadataList = fileUploadService.saveMultiFileData(files, errors);
-		return new ResponseEntity<List<FileMetadata>>(fileMetadataList, HttpStatus.OK);
+		logger.info(" MultipartFile []  :");
+		List<FileMetadata> fileMetadataList = null;
+		fileMetadataList = fileUploadService.saveMultiFileData(files, errors);
+		return new ResponseEntity<>(fileMetadataList, HttpStatus.OK);
 	}
 
 	@GetMapping("/getAllFileValidateData")
 	public ResponseEntity<List<FileMetadata>> getAllFileValidateData() {
-		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
+		List<FileMetadata> fileMetadataList = null;
 		fileMetadataList = fileUploadService.getAllFileValidateData();
-		return new ResponseEntity<List<FileMetadata>>(fileMetadataList, HttpStatus.OK);
+		return new ResponseEntity<>(fileMetadataList, HttpStatus.OK);
 	}
 
 	@GetMapping("/getFileValidateDataById/{id}")
 	public ResponseEntity<Optional<FileMetadata>> getFileValidateData(@PathVariable String id) {
 		Optional<FileMetadata> fileMetadata = null;
 		fileMetadata = fileUploadService.getFileValidateDataById(id);
-		return new ResponseEntity<Optional<FileMetadata>>(fileMetadata, HttpStatus.OK);
+		return new ResponseEntity<>(fileMetadata, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteValidateFielData/{validateId}")

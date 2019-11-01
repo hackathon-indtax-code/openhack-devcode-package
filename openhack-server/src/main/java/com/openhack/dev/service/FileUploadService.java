@@ -3,7 +3,7 @@ package com.openhack.dev.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +11,8 @@ import java.util.Optional;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +30,11 @@ public class FileUploadService {
 
 	@Autowired
 	FileUploadRepository fileUploadRepository;
-	// @Autowired
-	// FileUploadKafkaConfiguration uploadKafkaConfiguration;
+
+	private static final Logger logger = LoggerFactory.getLogger(FileUploadService.class);
+	/*
+	 * @Autowired FileUploadKafkaConfiguration uploadKafkaConfiguration;
+	 */
 
 	public FileMetadata saveFileMetadata(FileMetadata fileMetadata) {
 
@@ -41,14 +46,14 @@ public class FileUploadService {
 
 	public List<FileMetadata> saveSingleFileData(MultipartFile file) {
 
-		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
+		List<FileMetadata> fileMetadataList = new ArrayList<>();
 		String jsonFielData = "";
 		FileMetadata fileMetadata = new FileMetadata();
 		fileMetadata.setFileName(file.getOriginalFilename());
 		try {
 			jsonFielData = convertJsonFileToString(file.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.info(e.toString());
 		}
 		fileMetadata.setJsonData(jsonFielData);
 		ValidateStatus validateStatus = ValidateStatus.SUBMITTED;
@@ -61,7 +66,7 @@ public class FileUploadService {
 
 	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList) {
 
-		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
+		List<FileMetadata> fileMetadataList = new ArrayList<>();
 		for (MultipartFile file : files) {
 
 			String jsonFielData = "";
@@ -70,12 +75,12 @@ public class FileUploadService {
 			try {
 				jsonFielData = convertJsonFileToString(file.getInputStream());
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e.toString());
 			}
 			fileMetadata.setJsonData(jsonFielData);
 			ValidateStatus validateStatus = ValidateStatus.SUBMITTED;
 			fileMetadata.setValidateStatus(validateStatus);
-			List<ErrorData> list = new ArrayList<ErrorData>();
+			List<ErrorData> list = new ArrayList<>();
 			// convert String errorList to Errors object
 			Gson gson = new Gson();
 			Errors[] errorsList = gson.fromJson(errorList, Errors[].class);
@@ -106,31 +111,22 @@ public class FileUploadService {
 		String jsonDataString = "";
 		InputStream inputStream = fileInputStream;
 		JSONParser jsonParser = new JSONParser();
-		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject = (JSONObject) jsonParser.parse(new InputStreamReader(inputStream, "UTF-8"));
-			jsonDataString = jsonObject.toJSONString();
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			jsonDataString = jsonParser.parse(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).toString();
+		} catch (IOException | ParseException e) {
+			logger.error(e.toString());
 		}
 		return jsonDataString;
 	}
 
 	public void initiateKafkaMessage(String validateKey) {
 
-		// uploadKafkaConfiguration.sendMessage(validateKey);
+		/* uploadKafkaConfiguration.sendMessage(validateKey); */
 	}
 
 	public List<FileMetadata> getAllFileValidateData() {
 
-		List<FileMetadata> fileMetadataList = new ArrayList<FileMetadata>();
+		List<FileMetadata> fileMetadataList = new ArrayList<>();
 		fileMetadataList = fileUploadRepository.findAll();
 		return fileMetadataList;
 	}
