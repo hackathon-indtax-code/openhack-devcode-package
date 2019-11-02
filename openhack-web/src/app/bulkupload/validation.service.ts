@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import 'ajv';
 import { ItrschemaService } from './itrschema.service';
 import ajv = require('ajv');
-import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
-import { Subscriber } from 'rxjs/internal/Subscriber';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +26,6 @@ export class ValidationService {
         ? this.itrSchema.getITR2Schema()
         : this.itrSchema.getITR3Schema();
     const errorObj = { errorDescription: '' };
-    const sub = new Subject<string>();
     const tempErrorDataObj: Array<any> = [];
     return new Promise((resolve, reject) => {
       if (this.tempFileNames.indexOf(uploadedFile.name) > -1) {

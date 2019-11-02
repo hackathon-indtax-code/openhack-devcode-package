@@ -20,7 +20,7 @@ import { MatTableModule } from '@angular/material/table';
 import { UploadComponent } from './bulkupload/upload/upload.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatTabsModule } from '@angular/material';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { JsonviewComponent } from './bulkupload/jsonview/jsonview.component';
@@ -29,6 +29,10 @@ import { ErrorbarComponent } from './bulkupload/errorbar/errorbar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ErrordataComponent } from './bulkupload/errordata/errordata.component';
 import { MatSelectModule } from '@angular/material/select';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DroolsComponent } from './dashboard/drools/drools.component';
+import { SchemaComponent } from './dashboard/schema/schema.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -38,7 +42,10 @@ import { MatSelectModule } from '@angular/material/select';
     ConfirmComponent,
     JsonviewComponent,
     ErrorbarComponent,
-    ErrordataComponent
+    ErrordataComponent,
+    DashboardComponent,
+    DroolsComponent,
+    SchemaComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +67,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatSnackBarModule,
     NgJsonEditorModule,
     MatTooltipModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTabsModule,
+    MatCheckboxModule
   ],
   providers: [
     {
