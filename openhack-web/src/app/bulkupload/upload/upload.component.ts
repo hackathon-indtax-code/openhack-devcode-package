@@ -1,8 +1,16 @@
 import { AppService } from './../../app.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Component, OnInit, ViewChild, Input, ElementRef, Inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Input,
+  ElementRef,
+  Inject
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ValidationService } from '../validation.service';
+import { GenerateschemaService } from 'src/app/dashboard/schema/generateschema.service';
 
 @Component({
   selector: 'app-upload',
@@ -10,6 +18,7 @@ import { ValidationService } from '../validation.service';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent implements OnInit {
+  mainSchema: any;
   @ViewChild('fileUpload', { static: false })
   fileUpload: ElementRef;
   @Input()
@@ -23,12 +32,26 @@ export class UploadComponent implements OnInit {
   constructor(
     private sanitizer: DomSanitizer,
     private appService: AppService,
+    private generateSchemaService: GenerateschemaService,
     public dialogRef: MatDialogRef<UploadComponent>,
     private validateService: ValidationService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.generateSchemaService.getMainSchema().subscribe(
+      data => {
+        const mainSchemaData: any = data;
+        if (data && mainSchemaData.jsonSchema) {
+          this.mainSchema = JSON.parse(mainSchemaData.jsonSchema);
+        }
+        console.log('schema generated : ' + data);
+      },
+      error => {
+        console.log('error in retrieveing data');
+      }
+    );
+  }
 
   onClick(event) {
     if (this.fileUpload) {
@@ -102,22 +125,24 @@ export class UploadComponent implements OnInit {
   uploadFiles(filesData) {
     let errordata: any = [];
     for (const fileData of filesData) {
-      this.validateService.getFinalErrorMessage(fileData , this.data.schemaType).then(
-        data => {
-          errordata = data;
-          this.appService.uploadFileData(fileData, errordata).subscribe(
-            response => {
-              console.log(response);
-              this.dialogRef.close(response);
-            },
-            error => console.log(error),
-            () => console.log('completed')
-          );
-        },
-        error => {
-          console.log('error in validating the json files');
-        }
-      );
+      this.validateService
+        .getFinalErrorMessage(fileData, this.data.schemaType, this.mainSchema)
+        .then(
+          data => {
+            errordata = data;
+            this.appService.uploadFileData(fileData, errordata).subscribe(
+              response => {
+                console.log(response);
+                this.dialogRef.close(response);
+              },
+              error => console.log(error),
+              () => console.log('completed')
+            );
+          },
+          error => {
+            console.log('error in validating the json files');
+          }
+        );
     }
   }
 }

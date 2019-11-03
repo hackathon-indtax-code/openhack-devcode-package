@@ -45,9 +45,8 @@
     </button>
   </div>
   <div
-    fxLayout="column"
+    [hidden]="jsonSchemaList.length === 0"
     style="margin-left: 10px;margin-right: 10px;"
-    *ngIf="dataSource.data.length > 0"
   >
     <table mat-table matSort [dataSource]="dataSource">
       <!--- Note that these columns can be defined in any order.
@@ -100,7 +99,7 @@
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
-    <button mat-raised-button color="primary" (click)="saveJsonSchemaData()">
+    <button style="width:100%;" mat-raised-button color="primary" (click)="saveJsonSchemaData()">
       Submit Json Schema
     </button>
   </div>

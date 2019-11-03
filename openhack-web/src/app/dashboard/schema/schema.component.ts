@@ -65,6 +65,8 @@ export class SchemaComponent implements OnInit {
           this.files = [];
         }
         this.files.push(files[i]);
+        this.jsonSchemaList = [];
+        this.dataSource.data = [...this.jsonSchemaList];
         //  }
       }
       // }
@@ -149,7 +151,7 @@ export class SchemaComponent implements OnInit {
 
   onChange(event, index) {
     const data = this.dataSource.data;
-    for (let i = 0; i < this.jsonSchemaList.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       if (i === index) {
         data[i].mainSchema = event.checked;
       } else {
@@ -160,8 +162,17 @@ export class SchemaComponent implements OnInit {
   }
 
   saveJsonSchemaData() {
+    const dataToSaveObj = this.dataSource.data;
+    if (!dataToSaveObj || !this.isMainSchemaSelected(dataToSaveObj)) {
+      this.snackBar.open('Please select a main Schema to save!', 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
+      return;
+    }
     let slackMessage = '';
-    this.fileService.saveJsonSchemaData(this.dataSource.data).subscribe(
+    this.fileService.saveJsonSchemaData(dataToSaveObj).subscribe(
       data => {
         slackMessage = 'Json Schema saved successfully.';
         console.log('saved data : ' + data);
@@ -178,5 +189,15 @@ export class SchemaComponent implements OnInit {
         });
       }
     );
+  }
+
+  isMainSchemaSelected(dataToSaveObj: any) {
+    let isChecked = false;
+    for (const dataObj of dataToSaveObj) {
+      if (dataObj.mainSchema === true) {
+        isChecked = true;
+      }
+    }
+    return isChecked;
   }
 }

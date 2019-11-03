@@ -90,52 +90,61 @@ public class ExcelToJsonService {
 		if (lastRowNum > 0) {
 			// Loop in sheet rows.
 			for (int i = firstRowNum; i < lastRowNum + 1; i++) {
-				// Get current row object.
-				Row row = sheet.getRow(i);
+				try {
+					// Get current row object.
+					Row row = sheet.getRow(i);
 
-				// Get first and last cell number.
-				int firstCellNum = row.getFirstCellNum();
-				int lastCellNum = row.getLastCellNum();
+					// Get first and last cell number.
+					int firstCellNum = row.getFirstCellNum();
+					int lastCellNum = row.getLastCellNum();
 
-				// Create a String list to save column data in a row.
-				List<String> rowDataList = new ArrayList<String>();
+					// Create a String list to save column data in a row.
+					List<String> rowDataList = new ArrayList<String>();
 
-				// Loop in the row cells.
-				for (int j = firstCellNum; j < lastCellNum; j++) {
-					// Get current cell.
-					Cell cell = row.getCell(j);
+					// Loop in the row cells.
+					for (int j = firstCellNum; j < lastCellNum; j++) {
+						// Get current cell.
+						Cell cell = row.getCell(j);
+						int cellType = 0;
+						// Get cell type.
+						if (cell == null) {
+							cellType = 3;
+						} else {
+							cellType = cell.getCellType().getCode();
+						}
 
-					// Get cell type.
-					int cellType = cell.getCellType().getCode();
+						if (cellType == CellType.NUMERIC.getCode()) {
+							double numberValue = cell.getNumericCellValue();
 
-					if (cellType == CellType.NUMERIC.getCode()) {
-						double numberValue = cell.getNumericCellValue();
+							// BigDecimal is used to avoid double value is counted use Scientific counting
+							// method.
+							// For example the original double variable value is 12345678, but jdk
+							// translated the value to 1.2345678E7.
+							String stringCellValue = BigDecimal.valueOf(numberValue).toPlainString();
 
-						// BigDecimal is used to avoid double value is counted use Scientific counting
-						// method.
-						// For example the original double variable value is 12345678, but jdk
-						// translated the value to 1.2345678E7.
-						String stringCellValue = BigDecimal.valueOf(numberValue).toPlainString();
+							rowDataList.add(stringCellValue);
 
-						rowDataList.add(stringCellValue);
+						} else if (cellType == CellType.STRING.getCode()) {
+							String cellValue = cell.getStringCellValue();
+							rowDataList.add(cellValue);
+						} else if (cellType == CellType.BOOLEAN.getCode()) {
+							boolean numberValue = cell.getBooleanCellValue();
 
-					} else if (cellType == CellType.STRING.getCode()) {
-						String cellValue = cell.getStringCellValue();
-						rowDataList.add(cellValue);
-					} else if (cellType == CellType.BOOLEAN.getCode()) {
-						boolean numberValue = cell.getBooleanCellValue();
+							String stringCellValue = String.valueOf(numberValue);
 
-						String stringCellValue = String.valueOf(numberValue);
+							rowDataList.add(stringCellValue);
 
-						rowDataList.add(stringCellValue);
-
-					} else if (cellType == CellType.BLANK.getCode()) {
-						rowDataList.add("");
+						} else if (cellType == CellType.BLANK.getCode()) {
+							rowDataList.add("");
+						}
 					}
-				}
 
-				// Add current row data list in the return list.
-				ret.add(rowDataList);
+					// Add current row data list in the return list.
+					ret.add(rowDataList);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return ret;
@@ -188,8 +197,15 @@ public class ExcelToJsonService {
 		List<JsonSchemaData> jsonSchemaDataLists = null;
 		jsonSchemaRepository.deleteAll();
 		jsonSchemaDataLists = jsonSchemaRepository.saveAll(jsonSchemaDataList);
-
 		return jsonSchemaDataLists;
+	}
+
+	public JsonSchemaData findByMainSchema() {
+		boolean mainSchema = true;
+		JsonSchemaData schemaData = null;
+		schemaData = jsonSchemaRepository.findByMainSchema(mainSchema);
+
+		return schemaData;
 	}
 
 }

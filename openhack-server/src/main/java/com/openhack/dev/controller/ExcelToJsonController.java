@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,14 @@ public class ExcelToJsonController {
 		List<JsonSchemaData> schemaDataList = null;
 		schemaDataList = excelToJsonService.saveJsonSchemaData(jsonSchemaDataList);
 		return new ResponseEntity<>(schemaDataList, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/getMainSchema")
+	public ResponseEntity<JsonSchemaData> saveJsonSchemaData() {
+		JsonSchemaData schemaData = null;
+		schemaData = excelToJsonService.findByMainSchema();
+		return new ResponseEntity<>(schemaData, HttpStatus.OK);
 
 	}
 

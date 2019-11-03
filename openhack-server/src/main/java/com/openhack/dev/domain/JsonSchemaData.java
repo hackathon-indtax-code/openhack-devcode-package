@@ -17,6 +17,6 @@ public class JsonSchemaData {
 	private String id;
 	private String entityName;
 	private String jsonSchema;
-	private String mainSchema;
+	private boolean mainSchema;
 
 }

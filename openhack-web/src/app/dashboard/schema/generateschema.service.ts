@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GenerateschemaService {
+  readonly apiUrl: string = 'http://localhost:8080';
   primitiveTypes = ['boolean', 'integer', 'number', 'string'];
   schemaVersion = 'http://json-schema.org/draft-07/schema#';
   embedded = true;
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   generateSchema(excelToJsonData): any {
-    let jsonSchemaVldList = [];
+    const jsonSchemaVldList = [];
     let groupedSchema: any;
     groupedSchema = _.chain(excelToJsonData)
       .reject(value => value.Ignore)
@@ -28,9 +30,6 @@ export class GenerateschemaService {
         required: this.processRequiredFields(value)
       }))
       .value();
-    console.log(
-      'groupedSchema [FINAL DATA] : ' + JSON.stringify(groupedSchema)
-    );
     if (groupedSchema) {
       _.forEach(groupedSchema, (value, key) => {
         jsonSchemaVldList.push({
@@ -134,5 +133,9 @@ export class GenerateschemaService {
       .filter(value1 => _.lowerCase(value1.Required) === 'true')
       .map(value2 => value2.Property)
       .value();
+  }
+
+  getMainSchema() {
+    return this.http.get(this.apiUrl + '/files/getMainSchema');
   }
 }
