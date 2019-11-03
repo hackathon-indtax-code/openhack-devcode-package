@@ -33,6 +33,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DroolsComponent } from './dashboard/drools/drools.component';
 import { SchemaComponent } from './dashboard/schema/schema.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatTooltipModule,
     MatSelectModule,
     MatTabsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSlideToggleModule
   ],
   providers: [
     {

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -18,19 +17,26 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.openhack.dev.domain.ErrorData;
 import com.openhack.dev.domain.Errors;
 import com.openhack.dev.domain.FileMetadata;
+import com.openhack.dev.domain.ITR;
+import com.openhack.dev.domain.SchemaErrorData;
 import com.openhack.dev.enums.ErrorStatus;
 import com.openhack.dev.enums.ValidateStatus;
 import com.openhack.dev.repository.FileUploadRepository;
+import com.openhack.dev.util.SchemaValidationUtil;
 
 @Service
 public class FileUploadService {
 
 	@Autowired
 	FileUploadRepository fileUploadRepository;
-
+	@Autowired
+	SchemaValidationUtil schemaValidationUtil;
+	@Autowired
+	ITRDroolsService itrDroolsService;
 	private static final Logger logger = LoggerFactory.getLogger(FileUploadService.class);
 	/*
 	 * @Autowired FileUploadKafkaConfiguration uploadKafkaConfiguration;
@@ -56,7 +62,7 @@ public class FileUploadService {
 			logger.info(e.toString());
 		}
 		fileMetadata.setJsonData(jsonFielData);
-		ValidateStatus validateStatus = ValidateStatus.SUBMITTED;
+		ValidateStatus validateStatus = ValidateStatus.SUCCESS;
 		fileMetadata.setValidateStatus(validateStatus);
 		fileMetadataList.add(fileMetadata);
 		saveFileMetadata(fileMetadata);
@@ -64,39 +70,69 @@ public class FileUploadService {
 		return fileMetadataList;
 	}
 
-	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList) {
+	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList, boolean isServerValidation) {
 
 		List<FileMetadata> fileMetadataList = new ArrayList<>();
 		for (MultipartFile file : files) {
 
-			String jsonFielData = "";
+			String jsonFileData = "";
 			FileMetadata fileMetadata = new FileMetadata();
 			fileMetadata.setFileName(file.getOriginalFilename());
 			try {
-				jsonFielData = convertJsonFileToString(file.getInputStream());
+				jsonFileData = convertJsonFileToString(file.getInputStream());
 			} catch (IOException e) {
 				logger.error(e.toString());
 			}
-			fileMetadata.setJsonData(jsonFielData);
-			ValidateStatus validateStatus = ValidateStatus.SUBMITTED;
+			fileMetadata.setJsonData(jsonFileData);
+			ValidateStatus validateStatus = ValidateStatus.SUCCESS;
 			fileMetadata.setValidateStatus(validateStatus);
-			List<ErrorData> list = new ArrayList<>();
-			// convert String errorList to Errors object
-			Gson gson = new Gson();
-			Errors[] errorsList = gson.fromJson(errorList, Errors[].class);
-			/* Test Error List */
-			if (errorsList.length > 0) {
-				ValidateStatus validateStatusError = ValidateStatus.ERROR;
-				fileMetadata.setValidateStatus(validateStatusError);
-				for (Errors errors : errorsList) {
-					ErrorData errorData = new ErrorData();
-					ErrorStatus errorState = ErrorStatus.SCHEMA_ERROR;
-					errorData.setErrorType(errorState);
-					errorData.setErrorDescription(errors.getErrorDescription());
-					list.add(errorData);
+			if (!isServerValidation) {
+				List<ErrorData> list = new ArrayList<>();
+				// convert String errorList to Errors object
+				Gson gson = new Gson();
+				Errors[] errorsList = gson.fromJson(errorList, Errors[].class);
+				/* Test Error List */
+				if (errorsList.length > 0) {
+					ValidateStatus validateStatusError = ValidateStatus.ERROR;
+					fileMetadata.setValidateStatus(validateStatusError);
+					for (Errors errors : errorsList) {
+						ErrorData errorData = new ErrorData();
+						ErrorStatus errorState = ErrorStatus.SCHEMA_ERROR;
+						errorData.setErrorType(errorState);
+						errorData.setErrorDescription(errors.getErrorDescription());
+						list.add(errorData);
+					}
+
+					fileMetadata.setErrorDataList(list);
+				}
+			} else {
+				List<ErrorData> lists = new ArrayList<>();
+				List<Errors> errorsList = null;
+				SchemaErrorData schemaErrorData = null;
+				schemaErrorData = schemaValidationUtil.getValidationDetails(jsonFileData);
+				fileMetadata.setDetailedErrorData(schemaErrorData.getDetailedErrorData());
+				errorsList = schemaErrorData.getErrorsData();
+				if (errorsList != null && !errorsList.isEmpty()) {
+					ValidateStatus validateStatusError = ValidateStatus.ERROR;
+					fileMetadata.setValidateStatus(validateStatusError);
+					for (Errors errors : errorsList) {
+						ErrorData errorData = new ErrorData();
+						ErrorStatus errorState = ErrorStatus.SCHEMA_ERROR;
+						errorData.setErrorType(errorState);
+						errorData.setErrorDescription(errors.getErrorDescription());
+						lists.add(errorData);
+					}
+
+					fileMetadata.setErrorDataList(lists);
 				}
 
-				fileMetadata.setErrorDataList(list);
+			}
+
+			if (fileMetadata.getErrorDataList() == null || fileMetadata.getErrorDataList().isEmpty()) {
+				ITR validatedItrObj = null;
+				Gson gson = new GsonBuilder().create();
+				ITR itrObject = gson.fromJson(jsonFileData, ITR.class);
+				// validatedItrObj = itrDroolsService.validateData(itrObject);
 			}
 
 			fileMetadataList.add(fileMetadata);

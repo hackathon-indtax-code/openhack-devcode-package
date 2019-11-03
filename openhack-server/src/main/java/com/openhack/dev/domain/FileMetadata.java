@@ -39,6 +39,8 @@ public class FileMetadata implements Persistable<String> {
 
 	private List<ErrorData> errorDataList;
 
+	private String detailedErrorData;
+
 	@Override
 	public String getId() {
 		// TODO Auto-generated method stub

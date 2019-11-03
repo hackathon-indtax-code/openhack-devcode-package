@@ -12,30 +12,28 @@ export class ValidationService {
     'dataITR2-4-invalid.json',
     'dataITR3-2-invalid.json',
     'dataITR3-3-invalid.json',
-    'dataITR3-4-invalid.json'
+    'dataITR3-4-invalid.json',
+    'SampleJson_invalid.json'
   ];
   ajvValidation = ajv({ allErrors: true, unknownFormats: 'ignore' });
   constructor(private itrSchema: ItrschemaService) {}
 
-  getFinalErrorMessage(uploadedFile: any, schemaType: string, mainSchema: any) {
+  getFinalErrorMessage(
+    uploadedFile: any,
+    schemaType: string,
+    mainSchema: any,
+    isServerValidation: boolean
+  ) {
+    if (isServerValidation) {
+      return new Promise((resolve, reject) => {
+        resolve(null);
+      });
+    }
     const reader = new FileReader();
     let jsonString = '';
     let schemaData = null;
     if (mainSchema) {
       schemaData = mainSchema;
-      const deletePropertyList = [
-        'maximum',
-        'minLength',
-        'maxLength',
-        'maxItems',
-        'minItems',
-        'minimum'
-      ];
-      let iterateSchemaObj: any = null;
-      for (const propertyItem of deletePropertyList) {
-        iterateSchemaObj = schemaData;
-        schemaData = this.updateProp(iterateSchemaObj, propertyItem);
-      }
     } else {
       schemaType === 'ITR_SCHEMA_2'
         ? this.itrSchema.getITR2Schema()
@@ -76,22 +74,5 @@ export class ValidationService {
         resolve(tempErrorDataObj);
       }
     });
-  }
-
-  updateProp(obj, propToDelete) {
-    for (const property in obj) {
-      if (obj.hasOwnProperty(property)) {
-        if (typeof obj[property] === 'object') {
-          this.updateProp(obj[property], propToDelete);
-        } else {
-          if (property === propToDelete && obj[property] === '') {
-            delete obj[property];
-          } else if (property === propToDelete && obj[property]) {
-            obj[property] = parseInt(obj[property], 10);
-          }
-        }
-      }
-    }
-    return obj;
   }
 }

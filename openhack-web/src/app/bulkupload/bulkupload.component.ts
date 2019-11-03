@@ -228,7 +228,8 @@ export class BulkuploadComponent implements OnInit {
     dialogConfig.minWidth = '800px';
 
     dialogConfig.data = {
-      errorDataList: currentElement.errorDataList
+      errorDataList: currentElement.errorDataList,
+      detailedErrorData: currentElement.detailedErrorData
     };
 
     const dialogRef = this.dialog.open(ErrordataComponent, dialogConfig);

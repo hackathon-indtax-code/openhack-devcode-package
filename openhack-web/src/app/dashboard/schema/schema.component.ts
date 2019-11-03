@@ -172,6 +172,8 @@ export class SchemaComponent implements OnInit {
       return;
     }
     let slackMessage = '';
+    let finalJsonSchema: any;
+    finalJsonSchema = this.updateSchemaValue(dataToSaveObj);
     this.fileService.saveJsonSchemaData(dataToSaveObj).subscribe(
       data => {
         slackMessage = 'Json Schema saved successfully.';
@@ -199,5 +201,49 @@ export class SchemaComponent implements OnInit {
       }
     }
     return isChecked;
+  }
+
+  updateSchemaValue(schemaList) {
+    for (const schemaObj of schemaList) {
+      schemaObj.jsonSchema = this.iterateProperties(
+        JSON.parse(schemaObj.jsonSchema)
+      );
+    }
+
+    return schemaList;
+  }
+
+  iterateProperties(schemaObj: any) {
+    const deletePropertyList = [
+      'maximum',
+      'minLength',
+      'maxLength',
+      'maxItems',
+      'minItems',
+      'minimum'
+    ];
+    let iterateSchemaObj = '';
+    for (const propertyItem of deletePropertyList) {
+      iterateSchemaObj = schemaObj;
+      schemaObj = this.updateProp(iterateSchemaObj, propertyItem);
+    }
+    return JSON.stringify(schemaObj);
+  }
+
+  updateProp(obj, propToDelete) {
+    for (const property in obj) {
+      if (obj.hasOwnProperty(property)) {
+        if (typeof obj[property] === 'object') {
+          this.updateProp(obj[property], propToDelete);
+        } else {
+          if (property === propToDelete && obj[property] === '') {
+            delete obj[property];
+          } else if (property === propToDelete && obj[property]) {
+            obj[property] = parseInt(obj[property], 10);
+          }
+        }
+      }
+    }
+    return obj;
   }
 }

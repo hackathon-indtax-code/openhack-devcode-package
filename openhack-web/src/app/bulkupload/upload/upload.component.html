@@ -24,16 +24,10 @@
       [multiple]="multiple"
     />
     <div style="flex-grow: 1"></div>
-    <!-- <button
-      [disabled]="files.length === 0"
-      mat-raised-button
-      color="primary"
-      (click)="removeSelectedFiles(files)"
-      class="buttonPosition"
-    >
-      <mat-icon>delete</mat-icon>
-      Delete All
-    </button> -->
+
+    <mat-slide-toggle color="accent" [(ngModel)]="isServerValidation">
+      Skip Client Validation
+    </mat-slide-toggle>
   </div>
 
   <mat-list>

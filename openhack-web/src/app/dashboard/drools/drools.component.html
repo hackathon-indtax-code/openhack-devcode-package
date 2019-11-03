@@ -1,1 +1,36 @@
-<p>drools works!</p>
+<div fxLayout="column" fxLayoutAlign="start center" style="padding-top: 10px;">
+  <button mat-raised-button color="primary" (click)="onClick($event)">
+    <mat-icon>add</mat-icon>
+    Upload Drools Rule File
+  </button>
+  <input
+    #fileUpload
+    type="file"
+    class="input_fileupload--hidden"
+    (input)="onInput($event)"
+    (change)="onFileSelected($event)"
+    [(ngModel)]="inputFileName"
+    [accept]="accept"
+    [multiple]="multiple"
+  />
+  <div style="flex-grow: 1"></div>
+
+  <mat-list style="width:22%;">
+    <mat-list-item *ngFor="let file of files; let i = index">
+      <span matLine style="display: flex;"
+        ><span style="margin-right: 10px;;">{{ i + 1 }}. </span
+        ><span>{{ file.name }}</span>
+        <div style="flex-grow: 1"></div>
+        <span
+          ><i
+            class="material-icons"
+            style="cursor: pointer;"
+            (click)="removeFile($event, file)"
+          >
+            delete
+          </i></span
+        ></span
+      >
+    </mat-list-item>
+  </mat-list>
+</div>

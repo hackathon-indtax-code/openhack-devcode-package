@@ -1,4 +1,6 @@
 <h1 mat-dialog-title>File Validator Error Data</h1>
+<div style="flex-grow: 1"></div>
+
 <div mat-dialog-content>
   <table mat-table matSort [dataSource]="dataSource">
     <!--- Note that these columns can be defined in any order.
@@ -35,5 +37,13 @@
 </div>
 
 <div mat-dialog-actions align="end">
+  <button
+    *ngIf="this.data.detailedErrorData"
+    mat-raised-button
+    color="primary"
+    (click)="showJsonViewer()"
+  >
+    Deep Error Analysis
+  </button>
   <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Close</button>
 </div>

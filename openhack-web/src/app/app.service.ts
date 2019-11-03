@@ -27,11 +27,17 @@ export class AppService {
     );
   }
 
-  uploadFileData(selectedFilesData: any, errorData: any) {
+  uploadFileData(
+    selectedFilesData: any,
+    errorData: any,
+    isServerValidation: boolean
+  ) {
     const formData = new FormData();
-
+    let isServerValidationVal = '';
     formData.append('files', selectedFilesData);
     formData.append('errors', JSON.stringify(errorData));
+    isServerValidationVal = isServerValidation ? 'true' : 'false';
+    formData.append('isServerValidation', isServerValidationVal);
     return this.http.post(this.apiUrl + '/api/uploadMultipleFiles', formData);
   }
 

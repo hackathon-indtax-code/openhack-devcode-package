@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.openhack.dev.domain.FileMetadata;
 import com.openhack.dev.service.FileUploadService;
+import com.openhack.dev.service.StoreDroolsResource;
 
 @RestController
 @RequestMapping("api")
@@ -26,6 +27,8 @@ public class FileUploadController {
 
 	@Autowired
 	FileUploadService fileUploadService;
+	@Autowired
+	StoreDroolsResource droolsResource;
 
 	private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
@@ -40,11 +43,11 @@ public class FileUploadController {
 
 	@PostMapping("/uploadMultipleFiles")
 	public ResponseEntity<List<FileMetadata>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,
-			@RequestParam("errors") String errors) {
+			@RequestParam("errors") String errors, @RequestParam("isServerValidation") boolean isServerValidation) {
 
 		logger.info(" MultipartFile []  :");
 		List<FileMetadata> fileMetadataList = null;
-		fileMetadataList = fileUploadService.saveMultiFileData(files, errors);
+		fileMetadataList = fileUploadService.saveMultiFileData(files, errors, isServerValidation);
 		return new ResponseEntity<>(fileMetadataList, HttpStatus.OK);
 	}
 
@@ -74,6 +77,12 @@ public class FileUploadController {
 		fileUploadService.deleteAllValidateFielData();
 		return new ResponseEntity<>(HttpStatus.OK);
 
+	}
+
+	@PostMapping("/uploadDroolsFile")
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+		droolsResource.saveDroolsRuleFile(file);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
