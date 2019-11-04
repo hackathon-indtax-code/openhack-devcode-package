@@ -1,5 +1,6 @@
 package com.openhack.dev.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.openhack.dev.domain.FileMetadata;
 import com.openhack.dev.service.FileUploadService;
 import com.openhack.dev.service.StoreDroolsResource;
@@ -43,7 +46,8 @@ public class FileUploadController {
 
 	@PostMapping("/uploadMultipleFiles")
 	public ResponseEntity<List<FileMetadata>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,
-			@RequestParam("errors") String errors, @RequestParam("isServerValidation") boolean isServerValidation) {
+			@RequestParam("errors") String errors, @RequestParam("isServerValidation") boolean isServerValidation)
+			throws JsonParseException, JsonMappingException, IOException {
 
 		logger.info(" MultipartFile []  :");
 		List<FileMetadata> fileMetadataList = null;

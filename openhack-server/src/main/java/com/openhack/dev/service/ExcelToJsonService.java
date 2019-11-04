@@ -110,7 +110,7 @@ public class ExcelToJsonService {
 						if (cell == null) {
 							cellType = 3;
 						} else {
-							cellType = cell.getCellType().getCode();
+							cellType = cell.getCellType();
 						}
 
 						if (cellType == CellType.NUMERIC.getCode()) {

@@ -97,7 +97,7 @@ export class BulkuploadComponent implements OnInit {
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.minHeight = '200px';
+    dialogConfig.minHeight = '400px';
     dialogConfig.minWidth = '500px';
     dialogConfig.panelClass = 'mat-dialog-override';
     dialogConfig.data = { schemaType: this.schemaModalValue };

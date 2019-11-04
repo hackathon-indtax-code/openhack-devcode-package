@@ -4,16 +4,16 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
 
 import com.openhack.dev.configuration.DroolsConfiguration;
-import com.openhack.dev.domain.ITR;
+import com.openhack.dev.domain.RootJosonObject;
 
 @Service
 public class ITRDroolsService {
 
-	public ITR validateData(ITR itr) {
+	public RootJosonObject validateData(RootJosonObject rootJsonObject) {
 		KieSession kieSession = new DroolsConfiguration().getKieSession();
-		kieSession.insert(itr);
+		kieSession.insert(rootJsonObject);
 		kieSession.fireAllRules();
-		return itr;
+		return rootJsonObject;
 
 	}
 }

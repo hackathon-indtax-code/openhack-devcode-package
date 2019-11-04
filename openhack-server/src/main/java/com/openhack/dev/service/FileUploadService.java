@@ -16,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.openhack.dev.domain.ErrorData;
 import com.openhack.dev.domain.Errors;
 import com.openhack.dev.domain.FileMetadata;
-import com.openhack.dev.domain.ITR;
+import com.openhack.dev.domain.RootJosonObject;
 import com.openhack.dev.domain.SchemaErrorData;
 import com.openhack.dev.enums.ErrorStatus;
 import com.openhack.dev.enums.ValidateStatus;
@@ -70,7 +72,7 @@ public class FileUploadService {
 		return fileMetadataList;
 	}
 
-	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList, boolean isServerValidation) {
+	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList, boolean isServerValidation) throws JsonParseException, JsonMappingException, IOException {
 
 		List<FileMetadata> fileMetadataList = new ArrayList<>();
 		for (MultipartFile file : files) {
@@ -129,10 +131,13 @@ public class FileUploadService {
 			}
 
 			if (fileMetadata.getErrorDataList() == null || fileMetadata.getErrorDataList().isEmpty()) {
-				ITR validatedItrObj = null;
-				Gson gson = new GsonBuilder().create();
-				ITR itrObject = gson.fromJson(jsonFileData, ITR.class);
-				// validatedItrObj = itrDroolsService.validateData(itrObject);
+				logger.info("Inside drools validation [        ]");
+				RootJosonObject validatedItrObj = null;
+				//Gson gson = new GsonBuilder().create();
+				//RootJosonObject rootJsonObject = gson.fromJson(jsonFileData, RootJosonObject.class);
+				ObjectMapper mapper = new ObjectMapper();
+				RootJosonObject rootJsonObject = mapper.readValue(jsonFileData, RootJosonObject.class);
+				validatedItrObj = itrDroolsService.validateData(rootJsonObject);
 			}
 
 			fileMetadataList.add(fileMetadata);
