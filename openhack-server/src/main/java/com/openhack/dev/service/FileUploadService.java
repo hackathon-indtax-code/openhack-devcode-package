@@ -72,7 +72,8 @@ public class FileUploadService {
 		return fileMetadataList;
 	}
 
-	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList, boolean isServerValidation) throws JsonParseException, JsonMappingException, IOException {
+	public List<FileMetadata> saveMultiFileData(MultipartFile[] files, String errorList, boolean isServerValidation)
+			throws JsonParseException, JsonMappingException, IOException {
 
 		List<FileMetadata> fileMetadataList = new ArrayList<>();
 		for (MultipartFile file : files) {
@@ -133,11 +134,22 @@ public class FileUploadService {
 			if (fileMetadata.getErrorDataList() == null || fileMetadata.getErrorDataList().isEmpty()) {
 				logger.info("Inside drools validation [        ]");
 				RootJosonObject validatedItrObj = null;
-				//Gson gson = new GsonBuilder().create();
-				//RootJosonObject rootJsonObject = gson.fromJson(jsonFileData, RootJosonObject.class);
 				ObjectMapper mapper = new ObjectMapper();
 				RootJosonObject rootJsonObject = mapper.readValue(jsonFileData, RootJosonObject.class);
 				validatedItrObj = itrDroolsService.validateData(rootJsonObject);
+				if (validatedItrObj != null) {
+					List<ErrorData> lists = new ArrayList<>();
+					ErrorData errorData = new ErrorData();
+					if (!validatedItrObj.getValidationMessages().equals("")) {
+						ErrorStatus errorState = ErrorStatus.CONTENT_ERROR;
+						errorData.setErrorType(errorState);
+						errorData.setErrorDescription(validatedItrObj.getValidationMessages());
+						lists.add(errorData);
+						ValidateStatus validateStatusError = ValidateStatus.ERROR;
+						fileMetadata.setValidateStatus(validateStatusError);
+						fileMetadata.setErrorDataList(lists);
+					}
+				}
 			}
 
 			fileMetadataList.add(fileMetadata);
