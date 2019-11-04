@@ -34,15 +34,26 @@
     </mat-list-item>
   </mat-list>
   <div *ngIf="files.length > 0">
-    <button
-      mat-raised-button
-      (click)="generateJsonSchema(files)"
-      style="margin-left:10px;"
-      color="accent"
-      mat-button
-    >
-      Generate Schema
-    </button>
+    <span
+      ><button
+        mat-raised-button
+        (click)="generateJsonSchema(files)"
+        style="margin-left:10px;"
+        color="accent"
+        mat-button
+      >
+        Generate Schema
+      </button></span
+    ><span class="spinenrStyle">
+      <mat-progress-spinner
+        *ngIf="showSpinner"
+        color="primary"
+        mode="indeterminate"
+        diameter="30"
+        value="90"
+      >
+      </mat-progress-spinner
+    ></span>
   </div>
   <div
     [hidden]="jsonSchemaList.length === 0"
@@ -99,7 +110,12 @@
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
-    <button style="width:100%;" mat-raised-button color="primary" (click)="saveJsonSchemaData()">
+    <button
+      style="width:100%;"
+      mat-raised-button
+      color="primary"
+      (click)="saveJsonSchemaData()"
+    >
       Submit Json Schema
     </button>
   </div>

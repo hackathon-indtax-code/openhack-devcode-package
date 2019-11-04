@@ -1,5 +1,6 @@
 package com.openhack.dev.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.openhack.dev.domain.DroolsRuleFile;
 import com.openhack.dev.domain.ErrorData;
 import com.openhack.dev.domain.Errors;
 import com.openhack.dev.domain.FileMetadata;
@@ -27,6 +30,7 @@ import com.openhack.dev.domain.RootJosonObject;
 import com.openhack.dev.domain.SchemaErrorData;
 import com.openhack.dev.enums.ErrorStatus;
 import com.openhack.dev.enums.ValidateStatus;
+import com.openhack.dev.repository.DroolsRuleFileRepository;
 import com.openhack.dev.repository.FileUploadRepository;
 import com.openhack.dev.util.SchemaValidationUtil;
 
@@ -39,6 +43,9 @@ public class FileUploadService {
 	SchemaValidationUtil schemaValidationUtil;
 	@Autowired
 	ITRDroolsService itrDroolsService;
+	@Autowired
+	DroolsRuleFileRepository droolsRuleFileRepository;
+
 	private static final Logger logger = LoggerFactory.getLogger(FileUploadService.class);
 	/*
 	 * @Autowired FileUploadKafkaConfiguration uploadKafkaConfiguration;
@@ -140,7 +147,9 @@ public class FileUploadService {
 				if (validatedItrObj != null) {
 					List<ErrorData> lists = new ArrayList<>();
 					ErrorData errorData = new ErrorData();
-					if (!validatedItrObj.getValidationMessages().equals("")) {
+					if (validatedItrObj.getValidationMessages() != null
+							&& (!validatedItrObj.getValidationMessages().equals(""))) {
+
 						ErrorStatus errorState = ErrorStatus.CONTENT_ERROR;
 						errorData.setErrorType(errorState);
 						errorData.setErrorDescription(validatedItrObj.getValidationMessages());
@@ -199,4 +208,24 @@ public class FileUploadService {
 	public void deleteAllValidateFielData() {
 		fileUploadRepository.deleteAll();
 	}
+
+	public String saveDroolsRuleFile(MultipartFile file) throws IOException {
+		droolsRuleFileRepository.deleteAll();
+		DroolsRuleFile droolsRuleFile = new DroolsRuleFile();
+		droolsRuleFile.setTitle(file.getOriginalFilename());
+		droolsRuleFile.setExcelFile(file.getBytes());
+		droolsRuleFile = droolsRuleFileRepository.insert(droolsRuleFile);
+		/* Update drools rule file with the new file */
+		updateDroolsFile(file);
+		return droolsRuleFile.getId();
+	}
+
+	public void updateDroolsFile(MultipartFile multipartFile) throws IOException {
+		String directoryName = "C:\\drools_excel_file\\";
+		File deleteFolder = new File(directoryName);
+		FileUtils.cleanDirectory(deleteFolder);
+		File file = new File(directoryName, "TotalIncome-Gender-DecisionTree.xlsx");
+		FileUtils.writeByteArrayToFile(file, multipartFile.getBytes());
+	}
+
 }

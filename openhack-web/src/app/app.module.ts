@@ -34,6 +34,7 @@ import { DroolsComponent } from './dashboard/drools/drools.component';
 import { SchemaComponent } from './dashboard/schema/schema.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatSelectModule,
     MatTabsModule,
     MatCheckboxModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {

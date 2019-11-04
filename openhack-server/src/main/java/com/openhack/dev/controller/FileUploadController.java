@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.openhack.dev.domain.FileMetadata;
 import com.openhack.dev.service.FileUploadService;
-import com.openhack.dev.service.StoreDroolsResource;
 
 @RestController
 @RequestMapping("api")
@@ -30,8 +29,6 @@ public class FileUploadController {
 
 	@Autowired
 	FileUploadService fileUploadService;
-	@Autowired
-	StoreDroolsResource droolsResource;
 
 	private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
@@ -84,8 +81,8 @@ public class FileUploadController {
 	}
 
 	@PostMapping("/uploadDroolsFile")
-	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-		droolsResource.saveDroolsRuleFile(file);
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+		fileUploadService.saveDroolsRuleFile(file);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

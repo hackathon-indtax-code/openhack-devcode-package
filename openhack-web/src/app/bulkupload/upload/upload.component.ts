@@ -19,6 +19,7 @@ import { GenerateschemaService } from 'src/app/dashboard/schema/generateschema.s
 })
 export class UploadComponent implements OnInit {
   mainSchema: any;
+
   isServerValidation = false;
   @ViewChild('fileUpload', { static: false })
   fileUpload: ElementRef;
@@ -144,12 +145,10 @@ export class UploadComponent implements OnInit {
                   this.dialogRef.close(response);
                 },
                 error => console.log(error),
-                () => console.log('completed')
+                () => {}
               );
           },
-          error => {
-            console.log('error in validating the json files');
-          }
+          error => {}
         );
     }
   }

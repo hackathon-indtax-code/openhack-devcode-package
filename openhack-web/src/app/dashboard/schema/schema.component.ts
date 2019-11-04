@@ -17,6 +17,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 })
 export class SchemaComponent implements OnInit {
   dataSource = new MatTableDataSource<any>();
+  showSpinner = false;
   displayedColumns: string[] = [
     'position',
     'entityName',
@@ -115,6 +116,7 @@ export class SchemaComponent implements OnInit {
   }
 
   generateJsonSchema(fileData: any) {
+    this.showSpinner = true;
     this.fileService.convertExcelToJosn(fileData[0]).subscribe(
       data => {
         console.log('data : ' + data);
@@ -123,7 +125,12 @@ export class SchemaComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
       },
-      error => console.log('error data : ' + error)
+      error => {
+        console.log('error data : ' + error);
+      },
+      () => {
+        this.showSpinner = false;
+      }
     );
   }
 

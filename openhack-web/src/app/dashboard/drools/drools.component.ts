@@ -11,6 +11,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 })
 export class DroolsComponent implements OnInit {
   inputFileName: string;
+  showSpinner = false;
   @ViewChild('fileUpload', { static: false })
   fileUpload: ElementRef;
   @Input()
@@ -23,8 +24,6 @@ export class DroolsComponent implements OnInit {
   constructor(
     private sanitizer: DomSanitizer,
     private fileService: FileconverterService,
-    private generateSchema: GenerateschemaService,
-    private dialog: MatDialog,
     public snackBar: MatSnackBar
   ) {}
 
@@ -92,5 +91,24 @@ export class DroolsComponent implements OnInit {
 
   clearInputElement() {
     this.fileUpload.nativeElement.value = '';
+  }
+
+  saveDroolsRule(fileData: any) {
+    this.showSpinner = true;
+    let responseMessage = '';
+    this.fileService.saveDroolsRule(fileData[0]).subscribe(
+      savedData => {
+        responseMessage = 'Drools Rules updated sucessfully.';
+      },
+      error => {
+        responseMessage = 'Updation failed.Please check server logs!';
+      },
+      () => {
+        this.showSpinner = false;
+        this.snackBar.open(responseMessage, 'Close', {
+          duration: 5000
+        });
+      }
+    );
   }
 }

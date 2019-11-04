@@ -10,7 +10,6 @@ export class FileconverterService {
   constructor(private appService: AppService, private http: HttpClient) {}
 
   convertExcelToJosn(fileData: any) {
-    console.log('convertExcelToJosn');
     const formData = new FormData();
     formData.append('file', fileData);
     return this.http.post(this.baseUrl + '/files/convertToJson', formData);
@@ -25,5 +24,11 @@ export class FileconverterService {
       JSON.stringify(jsonSchemaList),
       { headers }
     );
+  }
+
+  saveDroolsRule(fileData: any) {
+    const formData = new FormData();
+    formData.append('file', fileData);
+    return this.http.post(this.baseUrl + '/api/uploadDroolsFile', formData);
   }
 }

@@ -44,7 +44,7 @@ export class BulkuploadComponent implements OnInit {
     { value: 'ITR_SCHEMA_3', viewValue: 'ITR3 Schema' }
   ];
 
-  schemaModalValue: any;
+  schemaModalValue = this.itrSchemaType[1].value;
 
   constructor(
     private appService: AppService,
